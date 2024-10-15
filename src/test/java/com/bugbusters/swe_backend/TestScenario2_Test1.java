@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class TestCase2 {
+public class TestScenario2_Test1 {
 
     /*
         AC1014 -- Worked on Test scenario #2 which states: "User selects hotel and date for stay. User selects room/rooms. User quits."
@@ -31,6 +31,7 @@ public class TestCase2 {
     @Test
     void guestSelectRoom() {
         // AC1014 -- guest would select room number and floor. They also select the room type and the room has to be available in order to be selected.
+        // AC1015 -- this test assumes room is true
         int roomNumber = 101;
         int roomFloor = 1;
         String roomType = "Single";
@@ -40,6 +41,11 @@ public class TestCase2 {
         assertEquals("Single", roomType);
         assertEquals(1, roomFloor);
         assertTrue(availability);
+
+        if (availability) {
+            System.out.println("Room is available");
+        }
+
     }
 
 

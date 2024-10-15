@@ -16,9 +16,15 @@ public class TestCase2 {
     void guestSelectHotel() {
         // AC1014 -- guest will select hotel and date for stay here, and check if the date passed through equals the string date given in the assert method
         String selectedHotel = "Test Hotel";
-        String selectedDate = "2024-12-01";
         assertEquals("Test Hotel", selectedHotel);
-        assertEquals("2024-12-01", selectedDate);
+    }
+
+
+    @Test
+    void guestSelectDate() {
+        // AC1015 -- guest selects the date for their stay after choosing hotel.
+        String selectedDate = "2024-10-15";
+        assertEquals("2024-10-15", selectedDate);
     }
 
 

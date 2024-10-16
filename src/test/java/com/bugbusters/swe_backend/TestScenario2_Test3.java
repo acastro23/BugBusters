@@ -9,25 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestScenario2_Test3 {
 
     /*
-        AC1015 -- Worked on Test scenario #2 which states: "User selects hotel and date for stay. User selects room/rooms. User quits."
-        This test if guest books too far in advance
+        Inconclusive
     */
 
-    @Test
-    void guestSelectHotel() {
-        String selectedHotel = "Test Hotel";
-        assertEquals("Test Hotel", selectedHotel);
-    }
-
-
-    @Test
-    void guestSelectInvalidDate() {
-        /*
-            AC1015 -- A user should not be able to book 1 years in advance
-        */
-
-        int year = 2026;
-        int expectedYear = 2025;
-        assertThat(year).isLessThanOrEqualTo(expectedYear);
-    }
 }

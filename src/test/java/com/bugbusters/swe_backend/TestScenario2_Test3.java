@@ -13,12 +13,13 @@ public class TestScenario2_Test3 {
     @Test
     void guestSelectsRoomAndAvailabilityIsUpdated() {
 
-        boolean availability = true;
 
         String guestPreference = "Single";
         String roomType = guestPreference.equals("Single") ? "Single" : "Double";
 
         assertEquals(guestPreference, roomType);
+
+        boolean availability = true;
         assertTrue(availability);
 
         availability = false;

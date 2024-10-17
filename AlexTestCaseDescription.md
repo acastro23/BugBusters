@@ -21,7 +21,7 @@ Guest then selects a room, for the general class, assume the guest is only looki
 User can not book less than one room
 ```
 
-guest will attempt to book 0 rooms. This attemp makes no sense in practice, so an error should be thrown when the user attempts. A method(bookRooms()) will handle the logic for when a user attempts this through and if condition. 
+guest will attempt to book 0 rooms. This attempt makes no sense in practice, so an error should be thrown when the user attempts. A method(bookRooms()) will handle the logic for when a user attempts this through and if condition. 
 
 If the number of rooms guest tries to book is less than one, then thrown an IllegalArgumentException. Now, in the test method, an int object holds the number of rooms the user is attempting to book. The object will then be passed through and assertThrows() method. Assume the object that holds number of room = 0, when its passed through the assertThrows() method, it calls on the bookRooms() method that handled the exception logic and will throw an error to the user as expected. Therefore, the case should pass when the object < 1, and it should fail if the object > 1 since no exception would get thrown at the user.
 

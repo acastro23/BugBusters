@@ -11,7 +11,7 @@ Alex Castro worked on test case scenario 2:
 # TestScenario2_General
 This class test the general testing scenario where a user will try to select a hotel, date, and room, then guest quits the application. The guest will first select their hotel and that is checked with a string with the name of our hotel. That string is then passed through and assertEqual() method to ensure that the string passed through matches the name of our hotel. As of right now, BugBusters plans on having one hotel. 
   
-Once the hotel is selected, the guset then has to select a date for which they want to check in. The same procedure as before follows. An string holds the date information, and then the date is checked for validation with an assertEqual() method.
+Once the hotel is selected, the guest then has to select a date for which they want to check in. The same procedure as before follows. An string holds the date information, and then the date is checked for validation with an assertEqual() method.
 
 Guest then selects a room, for the general class, assume the guest is only looking to book one room. There are a few objects that hold room information such as room number, room floor, room type, and the availability status. The room information is passed through the assert method to ensure a match. Note, the availability is set to true and passed through and assertTrue() method, so if availability is set to false.
 

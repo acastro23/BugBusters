@@ -37,4 +37,13 @@ guest will attempt to book more than 5 rooms. This is a bit much for our relativ
 If the number of rooms guest tries to book is more than five, then thrown an IllegalArgumentException. Now, in the test method, an int object holds the number of rooms the user is attempting to book. The object will then be passed through and assertThrows() method. Assume the object that holds number of room = 6, when its passed through the assertThrows() method, it calls on the bookRooms() method that handled the exception logic and will throw an error to the user as expected. Therefore, the case should pass when the object > 5, and it should fail if the object < 5 since no exception would get thrown at the user.
 
 
+# TestScenario2_Test3
+
+```
+User can only select room after selecting valid type
+```
+
+A guest may want a Single room, which comes with one bed, or a double, two beds. After the guest chooses the type of room they want, then they can select all available rooms if the type they want is valid.
+
+After the guest selects their room, that room then becomes unavailable.
 

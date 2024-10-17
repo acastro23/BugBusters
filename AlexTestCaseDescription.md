@@ -26,7 +26,7 @@ guest will attempt to book 0 rooms. This attemp makes no sense in practice, so a
 If the number of rooms guest tries to book is less than one, then thrown an IllegalArgumentException. Now, in the test method, an int object holds the number of rooms the user is attempting to book. The object will then be passed through and assertThrows() method. Assume the object that holds number of room = 0, when its passed through the assertThrows() method, it calls on the bookRooms() method that handled the exception logic and will throw an error to the user as expected. Therefore, the case should pass when the object < 1, and it should fail if the object > 1 since no exception would get thrown at the user.
 
 
-# TestScenario2_Test1
+# TestScenario2_Test2
 
 ```
 User can not book more than five rooms

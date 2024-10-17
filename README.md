@@ -9,6 +9,7 @@ Alex Castro worked on test case scenario 2:
 ```
 
 # TestScenario2_General
-  This class test the general testing scenario where a user will try to select a hotel, date, and room, then guest quits the application. The guest will first select their hotel and that is checked with a string with the name of our hotel. That string is then passed through and assertEqual() method to ensure that the string passed through matches the name of our hotel. As of right now, BugBusters plans on having one hotel.
+  This class test the general testing scenario where a user will try to select a hotel, date, and room, then guest quits the application. The guest will first select their hotel and that is checked with a string with the name of our hotel. That string is then passed through and assertEqual() method to ensure that the string passed through matches the name of our hotel. As of right now, BugBusters plans on having one hotel. 
+  
   Once the hotel is selected, the guset then has to select a date for which they want to check in. The same procedure as before follows. An string holds the date information, and that date is then checked for validation with an assertEqual() method.
 

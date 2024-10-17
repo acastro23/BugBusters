@@ -1,8 +1,7 @@
 package com.bugbusters.swe_backend;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestScenario2_General {
 
@@ -35,15 +34,22 @@ public class TestScenario2_General {
         int roomNumber = 100;
         int roomFloor = 1;
         String roomType = "Single";
-        boolean availability = true;
+        boolean availability = true;       // AC 1017 -- If false, you get a failed test and a message, otherwise test should pass
 
-        assertEquals(100, roomNumber);
-        assertEquals(1, roomFloor);
-        assertEquals("Single",roomType);
-        assertTrue(availability);
+        if (!availability) {
+            fail("That room can not be booked at this time");
+        }
+        else {
+            assertEquals(100, roomNumber);
+            assertEquals(1, roomFloor);
+            assertEquals("Single",roomType);
+            assertTrue(availability);
+        }
+
 
         // AC1015 -- guest would quit of application once their booking is done
         boolean guestQuits = true;
         assertTrue(guestQuits);
     }
+
 }

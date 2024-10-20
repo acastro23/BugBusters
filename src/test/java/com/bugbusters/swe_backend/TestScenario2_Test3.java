@@ -14,7 +14,7 @@ public class TestScenario2_Test3 {
     void guestSelectsRoomAndAvailabilityIsUpdated() {
 
 
-        String guestPreference = "Single";
+        String guestPreference = "Triple";
         String roomType = guestPreference.equals("Single") ? "Single" : "Double";
 
         assertEquals(guestPreference, roomType);

@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "../../../.."
+		},
+		{
+			"path": "../../../../../Downloads/hotelrsvp"
+		},
+		{
+			"path": "../../../../../Desktop/hotelrsvp"
+		}
+	],
+	"settings": {
+		"java.debug.settings.onBuildFailureProceed": true,
+		"java.compile.nullAnalysis.mode": "automatic"
+	}
+}

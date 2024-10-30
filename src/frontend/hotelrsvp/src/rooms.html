@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  justify-content: center; /* Center the images horizontally */
+  align-items: center; /* Center the images vertically if needed */
+  gap: 20px; /* Space between the images */
+}
+
+.column {
+  width: 34%;
+  text-align: center; /* Center the text boxes below each image */
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+input[type="text"] {
+  width: 90%; /* Width of the text box */
+  padding: 5px;
+  margin-top: 10px; /* Space between image and text box */
+}
+
+.centered-text {
+  text-align: center;
+  font-weight: bold;
+}
+</style>
+</head>
+<?php include 'header.html'; ?> 
+<body>
+
+<div class="row">
+  <div class="column">
+    <img src="/images/one-bed.png" alt="One Bed">
+    <input type="text" placeholder="Enter text 1">
+    <input type="text" placeholder="Enter text 2">
+  </div>
+  <div class="column">
+    <img src="/images/two-bed.png" alt="Two Bed">
+    <input type="text" placeholder="Enter text 1">
+    <input type="text" placeholder="Enter text 2">
+  </div>
+</div>
+
+<?php include 'footer.html'; ?> 
+
+</body>
+</html>

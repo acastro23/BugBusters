@@ -32,11 +32,6 @@ public class GuestService {
     }
 
 
-    public Guest saveGuest(Guest guest) {
-        return guestRepository.save(guest);
-    }
-
-
     public void deleteGuest(Long id) {
         guestRepository.deleteById(id);
     }

@@ -17,7 +17,7 @@ public class TestScenario2_Test1 {
             AC1015 -- So if the guest selects to book less than 1 room then the exception gets thrown and the test passes.
                       However, if numOfRooms >= 1, the test should fail because no exception would get thrown.
         */
-        int numOfRooms = 1;
+        int numOfRooms = 0;
         assertThrows(IllegalArgumentException.class, () -> {
             bookRooms(numOfRooms);}, "User should not be able to book less than one room");
     }

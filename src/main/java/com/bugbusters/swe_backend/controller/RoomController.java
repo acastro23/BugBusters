@@ -2,7 +2,9 @@ package com.bugbusters.swe_backend.controller;
 
 import com.bugbusters.swe_backend.dto.RoomDTO;
 import com.bugbusters.swe_backend.entity.Room;
+import com.bugbusters.swe_backend.entity.RoomImage;
 import com.bugbusters.swe_backend.service.RoomService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +47,29 @@ public class RoomController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
         roomService.deleteRoom(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    //AC1103 -- This section has endpoints for roomImages --> Check RoomImage entity to look at the attributes, just has one besides the keys
+    @PostMapping("/{roomId}/images")
+    public ResponseEntity<RoomImage> addImageToRoom(@PathVariable Long roomId,
+                                                    @RequestParam String imageURL) {
+        RoomImage roomImage = roomService.addImageToRoom(roomId, imageURL);
+        return ResponseEntity.status(HttpStatus.CREATED).body(roomImage);
+    }
+
+    //AC1103 -- get all images for a specific room
+    @GetMapping("/{roomId}/images")
+    public ResponseEntity<List<RoomImage>> getImagesForRoom(@PathVariable Long roomId) {
+        List<RoomImage> roomImages = roomService.getImagesForRoom(roomId);
+        return ResponseEntity.ok(roomImages);
+    }
+
+    //AC1103 -- delete image by its ID
+    @DeleteMapping("/images/{imageID}")
+    public ResponseEntity<Void> deleteRoomImage(@PathVariable Long imageID) {
+        roomService.deleteRoomImage(imageID);
         return ResponseEntity.noContent().build();
     }
 }

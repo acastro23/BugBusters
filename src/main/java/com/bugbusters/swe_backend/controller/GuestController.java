@@ -3,6 +3,8 @@ package com.bugbusters.swe_backend.controller;
 import com.bugbusters.swe_backend.dto.GuestDTO;
 import com.bugbusters.swe_backend.entity.Guest;
 import com.bugbusters.swe_backend.service.GuestService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,13 +42,14 @@ public class GuestController {
     }
 
     @PostMapping
-    public Guest createGuest(@RequestBody Guest guest) {
-        return guestService.saveGuest(guest);
+    public ResponseEntity<Guest> createGuest(@Valid @RequestBody GuestDTO guestDTO) {
+        Guest createdGuest = guestService.createGuest(guestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdGuest);
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Guest> updateGuest(@PathVariable Long id, @RequestBody GuestDTO guestDTO) {
+    public ResponseEntity<Guest> updateGuest(@PathVariable Long id, @Valid @RequestBody GuestDTO guestDTO) {
         Guest updatedGuest = guestService.updateGuest(id, guestDTO);
         return ResponseEntity.ok(updatedGuest);
     }

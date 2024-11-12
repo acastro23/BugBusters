@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
-public class TestCase3 {
+public class TestScenario3_Test1 {
     
     @Test
     void allCreditCardDetailsValid(){

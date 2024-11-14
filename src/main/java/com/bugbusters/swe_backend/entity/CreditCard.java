@@ -8,6 +8,8 @@ import lombok.Setter;
 @Table(name = "payment")     // maps to our payment table in the database
 @Getter
 @Setter
+//Test Comment
+//Test Comment
 public class CreditCard {
 
     @Id

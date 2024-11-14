@@ -1,0 +1,21 @@
+package com.bugbusters.swe_backend.repository;
+
+import com.bugbusters.swe_backend.entity.Booking;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import java.time.LocalDateTime;
+import java.util.List;
+
+/*
+    AC1019 -- This class is a repository class, so its purpose is to interact with the booking table in the database, so
+    we actually query the database to check if a room is available here
+*/
+
+public interface BookingRepository extends JpaRepository<Booking, Long> {
+    @Query("SELECT booking FROM Booking booking WHERE booking.myRoom.roomID = :roomID AND " +
+            "(booking.checkInTime <= :checkOut AND booking.checkOutTime >= :checkIn)")
+    List<Booking> findBookings(@Param("roomID") Long roomID,
+                               @Param("checkIn") LocalDateTime checkIn,
+                               @Param("checkOut") LocalDateTime checkOut);
+}

@@ -14,14 +14,17 @@ public class CreditCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name = "cardnumber", nullable = false)
-    private String cardNumber;
+    private Long cardNumber;
 
     @Column(name = "cvv", nullable = false)
     private int cvv;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "firstname", nullable = false)
+    private String firstName;
+
+    @Column(name = "lastname", nullable = false)
+    private String lastName;
 
     @Column(name = "expdate", nullable = false)
-    private int expdate;
+    private int expDate;
 }

@@ -8,7 +8,7 @@ import lombok.Setter;
 @Table(name = "payment")     // maps to our payment table in the database
 @Getter
 @Setter
-public class CreditCard {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,12 +19,15 @@ public class CreditCard {
     @Column(name = "cvv", nullable = false)
     private int cvv;
 
+    @Column(name = "expdate", nullable = false)
+    private String expDate;
+
+    @Column(name = "paymentdate", nullable = false)
+    private String paymentDate;
+
     @Column(name = "firstname", nullable = false)
     private String firstName;
 
     @Column(name = "lastname", nullable = false)
     private String lastName;
-
-    @Column(name = "expdate", nullable = false)
-    private int expDate;
 }

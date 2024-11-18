@@ -1,14 +1,10 @@
 package com.bugbusters.swe_backend.repository;
 
-import com.bugbusters.swe_backend.entity.CreditCard;
+import com.bugbusters.swe_backend.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CreditCardRepository extends JpaRepository<CreditCard, Long> {
+public interface PaymentRepository extends JpaRepository<Payment, Long> {
     
 }
-
-
-
-

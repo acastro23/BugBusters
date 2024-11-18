@@ -4,6 +4,7 @@ import com.bugbusters.swe_backend.dto.RoomDTO;
 import com.bugbusters.swe_backend.entity.Room;
 import com.bugbusters.swe_backend.entity.RoomImage;
 import com.bugbusters.swe_backend.service.RoomService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,15 +35,16 @@ public class RoomController {
     }
 
     @PostMapping
-    public Room createRoom(@RequestBody RoomDTO roomDTO) {
+    public Room createRoom(@Valid @RequestBody RoomDTO roomDTO) {
         return roomService.createRoom(roomDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody RoomDTO roomDTO) {
+    public ResponseEntity<Room> updateRoom(@PathVariable Long id, @Valid @RequestBody RoomDTO roomDTO) {
         Room updatedRoom = roomService.updateRoom(id, roomDTO);
         return ResponseEntity.ok(updatedRoom);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {

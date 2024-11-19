@@ -1,138 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hotel Reservation</title>
-  <style>
-    /* Reset default margin and padding */
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
+<style>
+    body {
+        margin: 0;
+        padding: 0;
     }
 
-    /* Navbar styling */
     .navbar {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      background-color: #6F4E37;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
+        display: flex;
+        justify-content: center; 
+        align-items: center; 
+        overflow: hidden;
+        background-color: #6F4E37;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000; 
+        height: 60px; 
     }
 
     .navbar a {
-      color: white;
-      text-align: center;
-      padding: 14px 16px;
-      text-decoration: none;
-      font-size: 20px;
+        float: left;
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 20px;
     }
 
     .navbar a:hover {
-      background: #ddd;
-      color: black;
+        background: #ddd;
+        color: black;
     }
 
-    /* Centered container */
-    .container {
-      max-width: 400px;
-      margin: 120px auto 20px;
-      padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      background-color: #f9f9f9;
+    * {
+        box-sizing: border-box;
     }
 
-    /* Form heading */
-    h2 {
-      text-align: center;
-      color: #6F4E37;
-    }
-
-    /* Form labels and input */
-    label {
-      display: block;
-      margin-top: 15px;
-      color: #333;
-    }
-
-    input[type="date"] {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    /* Submit button */
-    .submit-btn {
-      width: 100%;
-      padding: 10px;
-      margin-top: 20px;
-      background-color: #6F4E37;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .submit-btn:hover {
-      background-color: #5a3e2f;
-    }
-
-    /* Spacing */
     .row {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        gap: 20px; 
+        margin-top: 80px; 
     }
-  </style>
+
+    .column {
+        width: 34%;
+        text-align: center; 
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+
+    input[type="text"] {
+        width: 90%; 
+        padding: 5px;
+        margin-top: 10px; 
+    }
+
+    .centered-text {
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    .button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #6F4E37;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .button:hover {
+        background-color: #5a3e2f;
+    }
+    .amenities {
+        margin-top: 15px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .amenities h3 {
+        margin: 5px 0;
+        color: #6F4E37;
+        font-size: 16px;
+    }
+</style>
 </head>
 <body>
-
+ 
 <div class="navbar">
-  <a href="home.html">Home</a>
-  <a href="rooms.html">Rooms</a> 
-  <a href="login.html">Login</a>
-
+    <a href="http://18.222.229.220/wp-content/themes/myclass/home.php">Home</a>
+    <a href="http://18.222.229.220/wp-content/themes/myclass/rsvp.php">Reserve Your Stay</a>
+    <a href="http://18.222.229.220//wp-content/themes/myclass/login.php">Login</a>
 </div>
 
-<div class="container">
-  <h2>Reserve Your Stay</h2>
-  
-  <form action="rooms.html" method="post">
-    <label for="checkin">Check-In Date:</label>
-    <input type="date" id="checkin" name="checkin" required>
+<div class="row">
+  <div class="column">
+    <img src="images/one-bed.png" alt="one-bed" style="width:100%">
+    <p><b>One-bed Room</b></p>
+    <a href="payment.html" class="button">Book Now $100</a>
+    <div class="amenities">
+      <h3>Amenities with this room and hotel</h3>
+      <p>Free WiFi</p>
+      <p>1 King Bed</p>
+      <p>640 sq ft</p>
+      <p>Pool</p>
+      <p>48-inch flat-screen TV</p>
+      <p>Bathroom</p>
+      <p>24/hr hotel assistance </p>
+    </div>
+  </div>
+  <div class="column">
+    <img src="images/two-bed.png" alt="two-bed" style="width:100%">
+    <p><b>Two-bed Room</b></p>
+    <a href="payment.html" class="button">Book Now $130</a>
+    <div class="amenities">
+      <h3>Amenities with this room and hotel</h3>
+      <p>Free WiFi</p>
+      <p>1 King Bed</p>
+      <p>640 sq ft</p>
+      <p>Pool</p>
+      <p>48-inch flat-screen TV</p>
+      <p>Bathroom</p>
+      <p>24/hr hotel assistance </p>
 
-    <label for="checkout">Check-Out Date:</label>
-    <input type="date" id="checkout" name="checkout" required>
-
-    <button type="submit" class="submit-btn">Book Now</button>
-  </form>
+    </div>
+  </div>
 </div>
 
-<script>
-  // Set the minimum date to today for check-in and check-out
-  const today = new Date().toISOString().split("T")[0];
-  document.getElementById("checkin").setAttribute("min", today);
-  document.getElementById("checkout").setAttribute("min", today);
 
-  // Optional: Update the checkout date's min based on the selected check-in date
-  document.getElementById("checkin").addEventListener("change", function() {
-    const checkinDate = this.value;
-    document.getElementById("checkout").setAttribute("min", checkinDate);
-  });
-</script>
+
+<?php include 'footer.html'; ?> 
 
 </body>
 </html>
-
 

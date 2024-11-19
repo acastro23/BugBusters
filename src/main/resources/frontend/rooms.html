@@ -2,54 +2,148 @@
 <html>
 <head>
 <style>
-* {
-  box-sizing: border-box;
-}
+    body {
+        margin: 0;
+        padding: 0;
+    }
 
-.row {
-  display: flex;
-  justify-content: center; /* Center the images horizontally */
-  align-items: center; /* Center the images vertically if needed */
-  gap: 20px; /* Space between the images */
-}
+    .navbar {
+        display: flex;
+        justify-content: center; 
+        align-items: center; 
+        overflow: hidden;
+        background-color: #6F4E37;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000; 
+        height: 60px; 
+    }
 
-.column {
-  width: 34%;
-  text-align: center; /* Center the text boxes below each image */
-}
+    .navbar a {
+        float: left;
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 20px;
+    }
 
-img {
-  width: 100%;
-  height: auto;
-}
+    .navbar a:hover {
+        background: #ddd;
+        color: black;
+    }
 
-input[type="text"] {
-  width: 90%; /* Width of the text box */
-  padding: 5px;
-  margin-top: 10px; /* Space between image and text box */
-}
+    * {
+        box-sizing: border-box;
+    }
 
-.centered-text {
-  text-align: center;
-  font-weight: bold;
-}
+    .row {
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        gap: 20px; 
+        margin-top: 80px; 
+    }
+
+    .column {
+        width: 34%;
+        text-align: center; 
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+
+    input[type="text"] {
+        width: 90%; 
+        padding: 5px;
+        margin-top: 10px; 
+    }
+
+    .centered-text {
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    .button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #6F4E37;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .button:hover {
+        background-color: #5a3e2f;
+    }
+    .amenities {
+        margin-top: 15px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .amenities h3 {
+        margin: 5px 0;
+        color: #6F4E37;
+        font-size: 16px;
+    }
 </style>
 </head>
-<?php include 'header.html'; ?> 
 <body>
+ 
+<div class="navbar">
+    <a href="http://18.222.229.220/wp-content/themes/myclass/home.php">Home</a>
+    <a href="http://18.222.229.220/wp-content/themes/myclass/rsvp.php">Reserve Your Stay</a>
+    <a href="http://18.222.229.220//wp-content/themes/myclass/login.php">Login</a>
+</div>
 
 <div class="row">
   <div class="column">
-    <img src="/images/one-bed.png" alt="One Bed">
-    <input type="text" placeholder="Enter text 1">
-    <input type="text" placeholder="Enter text 2">
+    <img src="images/one-bed.png" alt="one-bed" style="width:100%">
+    <p><b>One-bed Room</b></p>
+    <a href="payment.html" class="button">Book Now $100</a>
+    <div class="amenities">
+      <h3>Amenities with this room and hotel</h3>
+      <p>Free WiFi</p>
+      <p>1 King Bed</p>
+      <p>640 sq ft</p>
+      <p>Pool</p>
+      <p>48-inch flat-screen TV</p>
+      <p>Bathroom</p>
+      <p>24/hr hotel assistance </p>
+    </div>
   </div>
   <div class="column">
-    <img src="/images/two-bed.png" alt="Two Bed">
-    <input type="text" placeholder="Enter text 1">
-    <input type="text" placeholder="Enter text 2">
+    <img src="images/two-bed.png" alt="two-bed" style="width:100%">
+    <p><b>Two-bed Room</b></p>
+    <a href="payment.html" class="button">Book Now $130</a>
+    <div class="amenities">
+      <h3>Amenities with this room and hotel</h3>
+      <p>Free WiFi</p>
+      <p>1 King Bed</p>
+      <p>640 sq ft</p>
+      <p>Pool</p>
+      <p>48-inch flat-screen TV</p>
+      <p>Bathroom</p>
+      <p>24/hr hotel assistance </p>
+
+    </div>
   </div>
 </div>
+
+
 
 <?php include 'footer.html'; ?> 
 

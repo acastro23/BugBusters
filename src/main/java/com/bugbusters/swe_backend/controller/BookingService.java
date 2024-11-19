@@ -20,7 +20,7 @@ import com.bugbusters.swe_backend.repository.BookingRepository;
 public class BookingService {
 
     @Autowired
-    private BookingRepository myBookingRepository;
+    private BookingRepository myBookingRepository:
 
     /**
      * Checks if a room is available for the given date range.

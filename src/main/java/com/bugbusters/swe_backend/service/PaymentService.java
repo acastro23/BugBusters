@@ -1,8 +1,10 @@
 package com.bugbusters.swe_backend.service;
 
 import com.bugbusters.swe_backend.dto.PaymentDTO;
+import com.bugbusters.swe_backend.entity.Guest;
 import com.bugbusters.swe_backend.entity.Payment;
 import com.bugbusters.swe_backend.exception.ResourceNotFoundException;
+import com.bugbusters.swe_backend.repository.GuestRepository;
 import com.bugbusters.swe_backend.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +14,11 @@ import java.util.Optional;
 @Service
 public class PaymentService {
     private final PaymentRepository paymentRepository;
-    
-    public PaymentService(PaymentRepository paymentRepository) {
+    private final GuestRepository guestRepository;
+
+    public PaymentService(PaymentRepository paymentRepository, GuestRepository guestRepository) {
         this.paymentRepository = paymentRepository;
+        this.guestRepository = guestRepository;
     }
     
     public List<Payment> getAllPayments() {
@@ -30,7 +34,12 @@ public class PaymentService {
     }
 
     public Payment createPayment(PaymentDTO paymentDTO){
+
+        Guest guest = guestRepository.findById(paymentDTO.getGuestID())
+                .orElseThrow(() -> new ResourceNotFoundException("Guest not found with ID: " + paymentDTO.getGuestID()));
+
         Payment payment = new Payment();
+        payment.setGuest(guest);
         payment.setCardNumber(paymentDTO.getCardNumber());
         payment.setCvv(paymentDTO.getCvv());
         payment.setExpDate(paymentDTO.getExpDate());

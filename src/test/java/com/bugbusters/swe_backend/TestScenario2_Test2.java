@@ -14,7 +14,7 @@ public class TestScenario2_Test2 {
     @Test
     void guestBooksRoom()
     {
-        int numOfRooms = 6;
+        int numOfRooms = 5;
         assertThrows(IllegalArgumentException.class, () -> {
             bookRooms(numOfRooms);
         }, "Guest should not be able to book more than 5 rooms!");

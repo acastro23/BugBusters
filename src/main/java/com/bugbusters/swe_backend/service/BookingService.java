@@ -88,34 +88,34 @@ public class BookingService {
      */
     public Booking updateBooking(Long bookingID, LocalDateTime checkIn, LocalDateTime checkOut) {
         Optional<Booking> existingBookingOpt = myBookingRepository.findById(bookingID);
-
+    
         if (existingBookingOpt.isEmpty()) {
             throw new IllegalArgumentException("Booking with the given ID does not exist");
         }
-
+    
         Booking existingBooking = existingBookingOpt.get();
-
+    
         if (checkIn == null || checkOut == null) {
             throw new IllegalArgumentException("Check-in and check-out times are required");
         }
-
+    
         if (checkOut.isBefore(checkIn)) {
             throw new IllegalArgumentException("Check-out date cannot be before check-in date");
         }
-
+    
         if (checkIn.isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("Check-in date cannot be in the past");
         }
-
+    
         if (!isRoomAvailable(existingBooking.getMyRoom().getRoomID(), checkIn, checkOut)) {
             throw new RoomUnavailableException("Room is unavailable for the updated date range");
         }
-
+    
         existingBooking.setCheckInTime(checkIn);
         existingBooking.setCheckOutTime(checkOut);
-
+    
         return myBookingRepository.save(existingBooking);
-    }
+    }    
 
     /**
      * Cancels a booking by its ID.
@@ -124,11 +124,11 @@ public class BookingService {
      */
     public void cancelBooking(Long bookingID) {
         Optional<Booking> existingBookingOpt = myBookingRepository.findById(bookingID);
-
+    
         if (existingBookingOpt.isEmpty()) {
             throw new IllegalArgumentException("Booking with the given ID does not exist");
         }
-
+    
         myBookingRepository.deleteById(bookingID);
     }
 }

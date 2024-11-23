@@ -1,3 +1,5 @@
+ https://gastate.view.usg.edu/content/enforced2/3149122-CO.090.CSC.CSC4350.XLS.ACS01.20252/Final%20Presentation%20RubricCSc4350.pdf
+ 
 Group #2 - “Bug Busters”
 Nathan Dermer, Julie Luu, Alex Castro, Muhammad Nadeem, Sumeya Hussein
 

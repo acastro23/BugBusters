@@ -12,12 +12,13 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long paymentID;                                         //AC1118 -- added the payment id
 
     @Column(name = "cardnumber", nullable = false)
-    private Long cardNumber;
+    private String cardNumber;
 
     @Column(name = "cvv", nullable = false)
-    private int cvv;
+    private String cvv;
 
     @Column(name = "expdate", nullable = false)
     private String expDate;
@@ -30,4 +31,9 @@ public class Payment {
 
     @Column(name = "lastname", nullable = false)
     private String lastName;
+
+    //AC1118 -- All changes made by Alex start here
+    @ManyToOne
+    @JoinColumn(name = "guestid", nullable = false)
+    private Guest guest;
 }

@@ -8,6 +8,7 @@ import com.bugbusters.swe_backend.repository.RoomImageRepository;
 import com.bugbusters.swe_backend.repository.RoomRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +38,7 @@ public class RoomService {
         room.setType(roomDTO.getType());
         room.setAvailability(roomDTO.getAvailability());
         room.setDescription(roomDTO.getDescription());
+        room.setPrice(roomDTO.getPrice());
 
         return roomRepository.save(room);
     }
@@ -50,6 +52,7 @@ public class RoomService {
         room.setType(roomDTO.getType());
         room.setAvailability(roomDTO.getAvailability());
         room.setDescription(roomDTO.getDescription());
+        room.setPrice(roomDTO.getPrice());
 
         return roomRepository.save(room);
     }
@@ -59,6 +62,11 @@ public class RoomService {
                 .orElseThrow(() -> new ResourceNotFoundException("Room with ID " + id + " not found"));
 
         roomRepository.delete(room);
+    }
+
+
+    public List<Room> searchRooms(Boolean availability, BigDecimal minPrice, BigDecimal maxPrice, String type) {
+        return roomRepository.searchRooms(availability, minPrice, maxPrice, type);
     }
 
 

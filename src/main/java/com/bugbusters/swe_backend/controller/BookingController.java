@@ -1,17 +1,24 @@
 package com.bugbusters.swe_backend.controller;
 
+import java.time.LocalDateTime;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.bugbusters.swe_backend.entity.Booking;
 import com.bugbusters.swe_backend.entity.Guest;
 import com.bugbusters.swe_backend.entity.Room;
 import com.bugbusters.swe_backend.exception.ResourceNotFoundException;
-import com.bugbusters.swe_backend.service.BookingService;
 import com.bugbusters.swe_backend.repository.GuestRepository;
 import com.bugbusters.swe_backend.repository.RoomRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.time.LocalDateTime;
+import com.bugbusters.swe_backend.service.BookingService;
 
 /*
     AC1019 -- BookingController does exactly what the other controller classes do, i.e., expose endpoints
@@ -51,5 +58,19 @@ public class BookingController {
         Booking myBooking = myBookingService.createBooking(myGuest, myRoom, checkIn, checkOut);
 
         return new ResponseEntity<>(myBooking, HttpStatus.CREATED);
+    }
+    
+    @PutMapping("/update")
+public ResponseEntity<Booking> updateBooking(@RequestParam Long bookingID, 
+                                             @RequestParam LocalDateTime checkIn, 
+                                             @RequestParam LocalDateTime checkOut) {
+    Booking updatedBooking = myBookingService.updateBooking(bookingID, checkIn, checkOut);
+    return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/cancel")
+public ResponseEntity<String> cancelBooking(@RequestParam Long bookingID) {
+    myBookingService.cancelBooking(bookingID);
+    return new ResponseEntity<>("Booking canceled successfully", HttpStatus.OK);
     }
 }

@@ -22,4 +22,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
                            @Param("maxPrice") BigDecimal maxPrice,
                            @Param("type") String type);
 
+
+    List<Room> findByType(String type);
+
+
 }

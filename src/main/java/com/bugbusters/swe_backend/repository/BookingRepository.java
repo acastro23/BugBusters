@@ -18,4 +18,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findBookings(@Param("roomID") Long roomID,
                                @Param("checkIn") LocalDateTime checkIn,
                                @Param("checkOut") LocalDateTime checkOut);
+
+    //AC1124 -- to update a booking, we also need a query statement for that
+    @Query("SELECT booking FROM Booking booking WHERE booking.myRoom.roomID = :roomID " +
+            "AND (booking.checkInTime <= :checkOut AND booking.checkOutTime >= :checkIn) " +
+            "AND booking.bookingID <> :bookingID")
+    List<Booking> findBookingsForUpdate(@Param("roomID") Long roomID, @Param("checkIn") LocalDateTime checkIn,
+                                        @Param("checkOut") LocalDateTime checkOut, @Param("bookingID") Long bookingID);
 }

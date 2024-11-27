@@ -1,16 +1,13 @@
 package com.bugbusters.swe_backend.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bugbusters.swe_backend.entity.Booking;
 import com.bugbusters.swe_backend.entity.Guest;
@@ -59,18 +56,57 @@ public class BookingController {
 
         return new ResponseEntity<>(myBooking, HttpStatus.CREATED);
     }
-    
-    @PutMapping("/update")
-public ResponseEntity<Booking> updateBooking(@RequestParam Long bookingID, 
-                                             @RequestParam LocalDateTime checkIn, 
-                                             @RequestParam LocalDateTime checkOut) {
-    Booking updatedBooking = myBookingService.updateBooking(bookingID, checkIn, checkOut);
-    return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
+
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Booking> updateBooking(@PathVariable("id") Long bookingID,
+                                                 @RequestParam LocalDateTime checkIn,
+                                                 @RequestParam LocalDateTime checkOut) {
+
+    /*
+        AC1124 -- Updating the booking should happen for a specific booking ID, which is why we use "/update/{id}".
+        Pass the bookingID and the updated check-in/out times to the service layer for processing.
+    */
+
+        Booking updatedBooking = myBookingService.updateBooking(bookingID, checkIn, checkOut);
+        return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
     }
 
-    @DeleteMapping("/cancel")
-public ResponseEntity<String> cancelBooking(@RequestParam Long bookingID) {
-    myBookingService.cancelBooking(bookingID);
-    return new ResponseEntity<>("Booking canceled successfully", HttpStatus.OK);
+
+    //AC1124 -- Same thing applies to canceling a booking, specify the id in the endpoint
+    @DeleteMapping("/cancel/{id}")
+    public ResponseEntity<String> cancelBooking(@PathVariable Long id) {
+        myBookingService.cancelBooking(id);
+        return new ResponseEntity<>("Booking canceled successfully.", HttpStatus.OK);
+    }
+
+
+    /*
+        AC1125 -- reminder to make use of this method later
+    */
+
+    @GetMapping("/check-availability")
+    public ResponseEntity<Boolean> checkRoomAvailability(
+            @RequestParam Long roomID,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkIn,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkOut) {
+        boolean isAvailable = myBookingService.isRoomAvailable(roomID, checkIn, checkOut);
+        return new ResponseEntity<>(isAvailable, HttpStatus.OK);
+    }
+
+
+    /*
+    AC1126 -- This endpoint is for the calendar feature, so the guest will start by selecting their check-in and check-out date, and also select their desired
+    room type. The front-end sends all the required info to the back-end, and the back-end will return a list of rooms available that you can then display
+    to the guest. Rooms that are booked for the selected dates are not shown
+    */
+
+    @GetMapping("/available-rooms")
+    public ResponseEntity<List<Room>> getAvailableRooms(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkIn,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkOut,
+            @RequestParam(required = false) String roomType) {
+        List<Room> availableRooms = myBookingService.findAvailableRooms(checkIn, checkOut, roomType);
+        return new ResponseEntity<>(availableRooms, HttpStatus.OK);
     }
 }

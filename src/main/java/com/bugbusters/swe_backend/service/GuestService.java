@@ -38,6 +38,10 @@ public class GuestService {
 
 
     public Guest createGuest(GuestDTO guestDTO) {
+        if (guestRepository.findByEmail(guestDTO.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("A guest with this email already exists.");
+        }
+
         Guest guest = new Guest();
         guest.setFName(guestDTO.getFname());
         guest.setLName(guestDTO.getLname());
@@ -46,6 +50,7 @@ public class GuestService {
 
         return guestRepository.save(guest);
     }
+
 
     /*
         Subject to change, when updating a guests, all fields must be updated no matter if you are only changing one field.

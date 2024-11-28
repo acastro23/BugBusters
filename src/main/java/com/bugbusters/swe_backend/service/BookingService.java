@@ -105,6 +105,7 @@ public class BookingService {
 
 
 
+
     //AC1127 -- This method actually generates the confirmation number once a booking is saved, it's a randomly generated 16 character string
     private String generateConfirmationNumber() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 16).toUpperCase();

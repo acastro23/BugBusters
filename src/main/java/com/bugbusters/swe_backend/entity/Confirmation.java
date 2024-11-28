@@ -1,25 +1,24 @@
 package com.bugbusters.swe_backend.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
+@Data
 @Entity
-@Table(name = "confirmation")     // maps to our confirmation table in the database
-@Getter
-@Setter
+@Table(name = "confirmation")
 public class Confirmation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
+    private Long confirmationID;
 
-    @Column(name = "confirmationid", nullable = false)
-    private Integer confirmationID;
+    @Column(nullable = false)
+    private Long bookingID;
 
-    //I know this is not right. I don't remeber how to do the creation if it is already created elsewhere
-    @Column(name = "bookingid", nullable = false)
-    private Integer bookingID;
+    @Column(nullable = false, unique = true)
+    private String confNum;
 
-    @Column(name = "confum", nullable = false)
-    private String conFNum;
+    @OneToOne
+    @JoinColumn(name = "bookingID", referencedColumnName = "bookingID", insertable = false, updatable = false)
+    private Booking booking;
 }

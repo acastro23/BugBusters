@@ -23,9 +23,6 @@ public class Payment {
     @Column(name = "expdate", nullable = false)
     private String expDate;
 
-    @Column(name = "paymentdate", nullable = false)
-    private String paymentDate;
-
     @Column(name = "firstname", nullable = false)
     private String firstName;
 

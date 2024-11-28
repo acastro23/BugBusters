@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,5 +74,15 @@ public class RoomController {
     public ResponseEntity<Void> deleteRoomImage(@PathVariable Long imageID) {
         roomService.deleteRoomImage(imageID);
         return ResponseEntity.noContent().build();
+    }
+
+    //AC1122 -- Adding an endpoint that allows for search functionality
+    @GetMapping("/search")
+    public List<Room> searchRooms(
+            @RequestParam(required = false) Boolean availability,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) String type) {
+        return roomService.searchRooms(availability, minPrice, maxPrice, type);
     }
 }

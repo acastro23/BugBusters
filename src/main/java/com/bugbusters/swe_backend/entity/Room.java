@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "rooms")
 @Getter
@@ -28,4 +30,7 @@ public class Room {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "price", nullable = false)
+    private BigDecimal price;
 }

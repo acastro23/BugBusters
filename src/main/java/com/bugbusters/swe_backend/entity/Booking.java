@@ -43,5 +43,8 @@ public class Booking {
     @Column(nullable = false)
     private LocalDateTime checkOutTime;
 
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Confirmation confirmation;
+
 
 }

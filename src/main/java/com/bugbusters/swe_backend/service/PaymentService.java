@@ -43,7 +43,6 @@ public class PaymentService {
         payment.setCardNumber(paymentDTO.getCardNumber());
         payment.setCvv(paymentDTO.getCvv());
         payment.setExpDate(paymentDTO.getExpDate());
-        payment.setPaymentDate(paymentDTO.getPaymentDate());
         payment.setFirstName(paymentDTO.getFirstName());
         payment.setLastName(paymentDTO.getLastName());
         return paymentRepository.save(payment);
@@ -56,7 +55,6 @@ public class PaymentService {
             payment.setCardNumber(paymentDTO.getCardNumber());
             payment.setCvv(paymentDTO.getCvv());
             payment.setExpDate(paymentDTO.getExpDate());
-            payment.setPaymentDate(paymentDTO.getPaymentDate());
             payment.setFirstName(paymentDTO.getFirstName());
             payment.setLastName(paymentDTO.getLastName());
         return paymentRepository.save(payment);

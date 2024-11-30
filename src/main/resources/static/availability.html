@@ -151,8 +151,8 @@
 
       // Create room card based on room type
       column.innerHTML = `
-    <img src="images/${room.type === 'single' ? 'one-bed.png' : 'two-bed.png'}" alt="${room.type}-bed">
-    <p><b>${room.type === 'single' ? 'One-bed Room' : 'Two-bed Room'}</b></p>
+    <img src="images/${room.type === 'Single' ? 'one-bed.png' : 'two-bed.png'}" alt="${room.type}-bed">
+    <p><b>${room.type === 'Single' ? 'One-bed Room' : 'Two-bed Room'}</b></p>
     <p>Price: $${room.price} per night</p>
     <p>Room Number: ${room.roomNumber}</p>
     <button class="button" onclick="bookRoom(${room.roomId}, '${room.type}')">Book Now</button>

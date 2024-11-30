@@ -106,9 +106,9 @@ public class BookingController {
 
 
     /*
-    AC1126 -- This endpoint is for the calndar feature, so the guest will start by selecting their check-in and check-out date, and also select their desired
+    AC1126 -- This endpoint is for the calendar feature, so the guest will start by selecting their check-in and check-out date, and also select their desired
     room type. The front-end sends all the required info to the back-end, and the back-end will return a list of rooms available that you can then display
-    to the guest. Rooms that are booked for the seleced dates are not shown
+    to the guest. Rooms that are booked for the selected dates are not shown
     */
 
     @GetMapping("/available-rooms")

@@ -204,7 +204,7 @@ public class BookingService {
 
     /*
         AC1127 -- This method handles booking details that will be sent to frontend when teh guest wants to see their booking details
-        room, gueest, and payment info is sent based on the confirmation number
+        room, guest, and payment info is sent based on the confirmation number
     */
 
     @Transactional(readOnly = true)

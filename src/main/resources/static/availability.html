@@ -134,59 +134,54 @@
 </div>
 
 <script>
-  async function fetchAvailableRooms() {
-    const checkIn = document.getElementById("checkin-date").value;
-    const checkOut = document.getElementById("checkout-date").value;
-    const roomType = document.getElementById("room-type").value;
 
-    try {
-      const response = await fetch(
-              `/api/bookings/available-rooms?checkIn=${checkIn}&checkOut=${checkOut}&roomType=${roomType}`
-      );
+  // Retrieve available room data from sessionStorage
+  const availableRooms = JSON.parse(sessionStorage.getItem("availableRooms"));
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch rooms. Server error occurred.");
-      }
+  // Get the container for room cards
+  const roomContainer = document.getElementById("room-container");
 
-      const rooms = await response.json();
-      console.log("Rooms fetched:", rooms); // Log the fetched data for debugging
-      displayAvailableRooms(rooms);
-    } catch (error) {
-      console.error("Error fetching available rooms:", error);
-      const roomList = document.getElementById("room-list");
-      roomList.innerHTML = `<li>Error fetching rooms. Please try again later.</li>`;
-    }
-  }
 
-  function displayAvailableRooms(rooms) {
-    const roomList = document.getElementById("room-list");
-    roomList.innerHTML = ""; // Clear previous results
+  // Check if availableRooms data exists
+  if (availableRooms && availableRooms.length > 0) {
+// Loop through available rooms and create room cards dynamically
+    availableRooms.forEach(room => {
+      const column = document.createElement("div");
+      column.classList.add("column");
 
-    if (rooms.length === 0) {
-      roomList.innerHTML = "<li>No rooms available for the selected dates and room type.</li>";
-      return;
-    }
+      // Create room card based on room type
+      column.innerHTML = `
+    <img src="images/${room.type === 'single' ? 'one-bed.png' : 'two-bed.png'}" alt="${room.type}-bed">
+    <p><b>${room.type === 'single' ? 'One-bed Room' : 'Two-bed Room'}</b></p>
+    <p>Price: $${room.price} per night</p>
+    <p>Room Number: ${room.roomNumber}</p>
+    <button class="button" onclick="bookRoom(${room.roomId}, '${room.type}')">Book Now</button>
+  `;
 
-    rooms.forEach((room) => {
-      const listItem = document.createElement("li");
-      listItem.textContent = `Room ${room.roomNumber}, ${room.type}, Floor ${room.floor}`;
-      const bookButton = document.createElement("button");
-      bookButton.textContent = "Book Now";
-      bookButton.onclick = () => selectRoom(room.roomID);
-      listItem.appendChild(bookButton);
-      roomList.appendChild(listItem);
+      // Append room card to the container
+      roomContainer.appendChild(column);
     });
+  } else {
+// Display a message if no rooms are available
+    roomContainer.innerHTML = `
+  <p class="centered-text">No rooms available for the selected dates.</p>
+  <p class="centered-text">Please try other dates or contact us for assistance.</p>
+`;
   }
 
-  function selectRoom(roomID) {
-    sessionStorage.setItem("selectedRoomID", roomID);
-    window.location.href = "booking.html";
+  // Function to handle room booking
+  function bookRoom(roomId, roomType) {
+    sessionStorage.setItem("selectedRoom", JSON.stringify({ roomId, roomType }));
+    window.location.href = "payment.html";
   }
-
 
 </script>
 </body>
 </html>
+
+
+
+
 
 
 

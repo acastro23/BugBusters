@@ -206,6 +206,9 @@
   const checkin = flatpickr("#checkinDate", {
     dateFormat: "Y-m-d",
     minDate: "tomorrow",
+    defaultHour: 16, // Default check-in is 1600
+    defaultMinute: 0, // Default is 0 minutes
+    enableTime: false, 
     onChange: function(selectedDates, dateStr, instance) {
       checkout.set("minDate", dateStr);
     }
@@ -213,7 +216,10 @@
 
   const checkout = flatpickr("#checkoutDate", {
     dateFormat: "Y-m-d",
-    minDate: new Date()
+    minDate: new Date(),
+    defaultHour: 11, // Default hour is checkout is 1100
+    defaultMinute: 0, // Default is 0 minutes
+    enableTime: false 
   });
 
   // Handle form submission
@@ -229,7 +235,7 @@
     }
 
     // Send data to backend via fetch
-    fetch(`/api/bookings/available-rooms?checkIn=${checkinDate}T00:00:00&checkOut=${checkoutDate}T00:00:00&roomType=${roomType}`, {
+    fetch(`/api/bookings/available-rooms?checkIn=${checkinDate}&checkOut=${checkoutDate}&roomType=${roomType}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

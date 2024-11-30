@@ -59,6 +59,11 @@ public class BookingService {
 
         if (!isRoomAvailable(room.getRoomID(), bookingDTO.getCheckInTime(), bookingDTO.getCheckOutTime())) {
             throw new RoomUnavailableException("Room is unavailable for the selected dates.");
+        //Changes from Nathan
+        } else if (bookingDTO.getCheckInTime().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("Check-in time cannot be in the past.");
+        } else if (!bookingDTO.getCheckOutTime().isAfter(bookingDTO.getCheckInTime())) {
+            throw new IllegalArgumentException("Check-out time must be after check-in time.");
         }
 
         Payment payment = null;
@@ -171,6 +176,14 @@ public class BookingService {
     private Guest createNewGuest(GuestDTO guestDTO) {
         if (guestDTO == null) {
             throw new IllegalArgumentException("Guest information is required to create a new guest.");
+            //Changes from Nathan
+        } else if (!guestDTO.getEmail().matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
+            throw new IllegalArgumentException("Invalid email format.");
+            //Not sure how numbers are being stored. Either as straight messages or with () between so this is subject to change
+        } else if (!guestDTO.getPhoneNumber().matches("^\\+?[0-9\\- ]+$")) {
+            throw new IllegalArgumentException("Invalid phone number.");
+        } else if (!guestDTO.getFname().matches("^[A-Za-z]+(?:[-' ][A-Za-z]+)*$") || !guestDTO.getLname().matches("^[A-Za-z]+(?:[-' ][A-Za-z]+)*$")){
+            throw new IllegalArgumentException(("The name may only contains letters."));
         }
 
         Guest guest = new Guest();

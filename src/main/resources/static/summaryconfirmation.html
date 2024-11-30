@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Booking Confirmation</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #6F4E37;
+      width: 100%;
+      padding: 10px 0;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 14px 16px;
+      font-size: 20px;
+    }
+
+    .navbar a:hover {
+      background: #ddd;
+      color: black;
+    }
+
+    .confirmation-container {
+      max-width: 600px;
+      margin: 100px auto 20px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h2 {
+      color: #6F4E37;
+      margin-bottom: 20px;
+    }
+
+    p {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .confirmation-number {
+      font-size: 18px;
+      font-weight: bold;
+      color: #6F4E37;
+    }
+
+    .details {
+      text-align: left;
+      margin-top: 20px;
+      font-size: 14px;
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+
+    .details p {
+      margin: 5px 0;
+    }
+
+    .footer {
+      background-color: #6F4E37;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 14px;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+<div class="navbar">
+  <a href="home.html">Home</a>
+  <a href="booking.html">Reserve Another Stay</a>
+</div>
+
+<div class="confirmation-container">
+  <h2>Booking Confirmation</h2>
+  <p>Your confirmation number is:</p>
+  <p class="confirmation-number" id="confirmationNumber"></p>
+
+  <div class="details">
+    <h3>Booking Details</h3>
+    <p><b>Guest Name:</b> <span id="guestName"></span></p>
+    <p><b>Email:</b> <span id="email"></span></p>
+    <p><b>Phone:</b> <span id="phone"></span></p>
+    <p><b>Room Type:</b> <span id="roomType"></span></p>
+    <p><b>Room Number:</b> <span id="roomNumber"></span></p>
+    <p><b>Floor:</b> <span id="floor"></span></p>
+    <p><b>Check-in Date:</b> <span id="checkinDate"></span></p>
+    <p><b>Check-out Date:</b> <span id="checkoutDate"></span></p>
+    <p><b>Price:</b> $<span id="price"></span></p>
+  </div>
+</div>
+
+<div class="footer">
+  &copy; 2024 Woods Inn, Inc
+</div>
+
+<script>
+  // Retrieve confirmation details from sessionStorage
+  const confirmationDetails = JSON.parse(sessionStorage.getItem("confirmationDetails"));
+
+  if (confirmationDetails) {
+// Populate confirmation details from sessionStorage
+    document.getElementById("confirmationNumber").textContent = confirmationDetails.confirmationNumber;
+    document.getElementById("guestName").textContent = confirmationDetails.guestName;
+    document.getElementById("email").textContent = confirmationDetails.email || "Not provided";
+    document.getElementById("phone").textContent = confirmationDetails.phone || "Not provided";
+    document.getElementById("roomType").textContent = confirmationDetails.roomType;
+    document.getElementById("roomNumber").textContent = confirmationDetails.roomNumber || "TBD";
+    document.getElementById("floor").textContent = confirmationDetails.floor || "TBD";
+    document.getElementById("checkinDate").textContent = confirmationDetails.checkin;
+    document.getElementById("checkoutDate").textContent = confirmationDetails.checkout;
+    document.getElementById("price").textContent = confirmationDetails.price;
+  } else {
+// Fallback to backend query if sessionStorage is empty
+    const urlParams = new URLSearchParams(window.location.search);
+    const confirmationNumber = urlParams.get("confirmation");
+
+    if (!confirmationNumber) {
+      alert("No confirmation number found. Please try again.");
+      window.location.href = "booking.html";
+    } else {
+      document.getElementById("confirmationNumber").textContent = confirmationNumber;
+
+      // Fetch booking details using the confirmation number
+      fetch(`/api/bookings/details?confNum=${confirmationNumber}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data) {
+                  document.getElementById("guestName").textContent = `${data.firstName} ${data.lastName}`;
+                  document.getElementById("email").textContent = data.email;
+                  document.getElementById("phone").textContent = data.phoneNumber;
+                  document.getElementById("roomType").textContent = data.roomType;
+                  document.getElementById("roomNumber").textContent = data.roomNumber || "TBD";
+                  document.getElementById("floor").textContent = data.floor || "TBD";
+                  document.getElementById("checkinDate").textContent = data.checkIn;
+                  document.getElementById("checkoutDate").textContent = data.checkOut;
+                  document.getElementById("price").textContent = data.price;
+                } else {
+                  alert("Error retrieving booking details. Please try again.");
+                }
+              })
+              .catch((error) => {
+                console.error("Error fetching reservation details:", error);
+                alert("An error occurred while fetching your booking details. Please try again.");
+              });
+    }
+  }
+
+</script>
+</body>
+</html>

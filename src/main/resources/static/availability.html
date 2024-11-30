@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* Make the body and html take up the full height and use flexbox */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Make the main content area flexible to push the footer down */
+    .main-content {
+      flex: 1;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #6F4E37;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      height: 60px;
+    }
+
+    .navbar a {
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 20px;
+    }
+
+    .navbar a:hover {
+      background: #ddd;
+      color: black;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-top: 80px;
+    }
+
+    .column {
+      width: 34%;
+      text-align: center;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    input[type="text"] {
+      width: 90%;
+      padding: 5px;
+      margin-top: 10px;
+    }
+
+    .centered-text {
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #6F4E37;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .button:hover {
+      background-color: #5a3e2f;
+    }
+
+    .amenities {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .amenities h3 {
+      margin: 5px 0;
+      color: #6F4E37;
+      font-size: 16px;
+    }
+
+    /* Footer styling */
+    .footer {
+      background-color: #6F4E37;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+<div class="navbar">
+  <a href="home.html">Home</a>
+  <a href="booking.html">Reserve Your Stay</a>
+  <a href="confirmation.html">Look up reservation</a>
+</div>
+
+<div class="main-content">
+  <h2 class="centered-text">Available Rooms</h2>
+  <div id="room-container" class="row"></div>
+</div>
+
+<div class="footer">
+  &copy; 2024 Woods Inn, Inc
+</div>
+
+<script>
+  async function fetchAvailableRooms() {
+    const checkIn = document.getElementById("checkin-date").value;
+    const checkOut = document.getElementById("checkout-date").value;
+    const roomType = document.getElementById("room-type").value;
+
+    try {
+      const response = await fetch(
+              `/api/bookings/available-rooms?checkIn=${checkIn}&checkOut=${checkOut}&roomType=${roomType}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch rooms. Server error occurred.");
+      }
+
+      const rooms = await response.json();
+      console.log("Rooms fetched:", rooms); // Log the fetched data for debugging
+      displayAvailableRooms(rooms);
+    } catch (error) {
+      console.error("Error fetching available rooms:", error);
+      const roomList = document.getElementById("room-list");
+      roomList.innerHTML = `<li>Error fetching rooms. Please try again later.</li>`;
+    }
+  }
+
+  function displayAvailableRooms(rooms) {
+    const roomList = document.getElementById("room-list");
+    roomList.innerHTML = ""; // Clear previous results
+
+    if (rooms.length === 0) {
+      roomList.innerHTML = "<li>No rooms available for the selected dates and room type.</li>";
+      return;
+    }
+
+    rooms.forEach((room) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = `Room ${room.roomNumber}, ${room.type}, Floor ${room.floor}`;
+      const bookButton = document.createElement("button");
+      bookButton.textContent = "Book Now";
+      bookButton.onclick = () => selectRoom(room.roomID);
+      listItem.appendChild(bookButton);
+      roomList.appendChild(listItem);
+    });
+  }
+
+  function selectRoom(roomID) {
+    sessionStorage.setItem("selectedRoomID", roomID);
+    window.location.href = "booking.html";
+  }
+
+
+</script>
+</body>
+</html>
+
+
+
+

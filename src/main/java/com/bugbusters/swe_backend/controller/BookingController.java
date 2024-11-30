@@ -69,7 +69,7 @@ public class BookingController {
     }
 
 
-    //AC1127 -- I was working on an update functionaliy, ignore this.
+    //AC1127 -- I was working on an update functionality, ignore this.
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Booking> updateBooking(

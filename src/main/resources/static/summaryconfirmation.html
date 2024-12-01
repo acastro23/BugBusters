@@ -153,9 +153,9 @@
               .then((response) => response.json())
               .then((data) => {
                 if (data) {
-                  document.getElementById("guestName").textContent = `${data.firstName} ${data.lastName}`;
+                  document.getElementById("guestName").textContent = `${data.fname} ${data.lname}`;
                   document.getElementById("email").textContent = data.email;
-                  document.getElementById("phone").textContent = data.phoneNumber;
+                  document.getElementById("phone").textContent = data.phonenumber;
                   document.getElementById("roomType").textContent = data.roomType;
                   document.getElementById("roomNumber").textContent = data.roomNumber || "TBD";
                   document.getElementById("floor").textContent = data.floor || "TBD";

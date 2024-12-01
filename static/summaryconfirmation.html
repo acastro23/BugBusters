@@ -148,7 +148,7 @@
     <p><strong>Guest Name:</strong> <span id="guestName"></span></p>
     <p><strong>Email:</strong> <span id="email"></span></p>
     <p><strong>Phone:</strong> <span id="phone"></span></p>
-    <p><strong>Room ID:</strong> <span id="roomID"></span></p>
+    <p><strong>Room Number:</strong> <span id="roomNumber"></span></p>
     <p><strong>Room Type:</strong> <span id="roomType"></span></p>
     <p><strong>Price:</strong> <span id="price"></span></p>
     <p><strong>Check-in Date:</strong> <span id="checkinDate"></span></p>
@@ -213,7 +213,7 @@ document.getElementById("confirmationForm").addEventListener("submit", function 
     })
     .then(roomData => {
         // Populate room details
-        document.getElementById("roomID").textContent = roomData.roomID;
+        document.getElementById("roomNumber").textContent = roomData.roomNumber;
         document.getElementById("roomType").textContent = roomData.type;
         document.getElementById("price").textContent = `$${roomData.price}`;
 
@@ -232,6 +232,9 @@ document.getElementById("confirmationForm").addEventListener("submit", function 
 <div class="footer">
   &copy; 2024 Woods Inn, Inc
 </div>
+
+</body>
+</html>
 
 </body>
 </html>

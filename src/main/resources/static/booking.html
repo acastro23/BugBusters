@@ -150,7 +150,7 @@
         <div class="room-card">
             <img src="images/one-bed.png" alt="One-bed Room">
             <p><b>One-bed Room</b></p>
-            <p>$100 per night</p>
+            <p>$150 per night</p>
             <div class="amenities">
                 <h3>Amenities</h3>
                 <p>Free Wi-Fi</p>
@@ -165,7 +165,7 @@
         <div class="room-card">
             <img src="images/two-bed.png" alt="Two-bed Room">
             <p><b>Two-bed Room</b></p>
-            <p>$130 per night</p>
+            <p>$250 per night</p>
             <div class="amenities">
                 <h3>Amenities</h3>
                 <p>Free Wi-Fi</p>
@@ -213,14 +213,18 @@
 
     const checkout = flatpickr("#checkoutDate", {
         dateFormat: "Y-m-d",
-        minDate: new Date()
+        minDate: new Date(),
     });
 
     // Handle form submission
     document.getElementById("checkAvailability").addEventListener("click", function () {
-        const checkinDate = document.getElementById("checkinDate").value; // Get check-in date
-        const checkoutDate = document.getElementById("checkoutDate").value; // Get check-out date
+        let checkinDate = document.getElementById("checkinDate").value; // Get check-in date
+        let checkoutDate = document.getElementById("checkoutDate").value; // Get check-out date
         const roomType = document.getElementById("roomType").value; // Get selected room type
+
+        // Append default times to dates
+        checkinDate += "T16:00:00"; // Set default check-in time to 4:00 pm
+        checkoutDate += "T11:00:00"; // Set default check-out time to 11:00 am
 
         // Validate input
         if (!checkinDate || !checkoutDate || !roomType) {
@@ -229,7 +233,7 @@
         }
 
         // Send data to backend via fetch
-        fetch(`/api/bookings/available-rooms?checkIn=${checkinDate}T00:00:00&checkOut=${checkoutDate}T00:00:00&roomType=${roomType}`, {
+        fetch(`/api/bookings/available-rooms?checkIn=${checkinDate}&checkOut=${checkoutDate}&roomType=${roomType}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -248,10 +252,7 @@
                 alert("An error occurred while checking availability. Please try again.");
             });
     });
-
 </script>
+
 </body>
 </html>
-
-
-

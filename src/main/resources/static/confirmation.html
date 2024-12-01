@@ -53,7 +53,7 @@
       border: 1px solid #ccc;
       border-radius: 8px;
       background-color: #fff;
-      max-width: 300px;
+      max-width: 400px;
       width: 100%;
       margin-top: 100px;
     }
@@ -79,6 +79,36 @@
       cursor: pointer;
       font-size: 16px;
       width: 100%;
+    }
+
+    /* Booking Details Styling */
+    .booking-details {
+      display: none; /* Initially hidden */
+      margin-top: 20px;
+      text-align: left;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .booking-details h3 {
+      color: #6F4E37;
+      margin-bottom: 10px;
+    }
+
+    .booking-details p {
+      margin: 5px 0;
+    }
+
+    /* Error message styling */
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
     }
 
     /* Footer styling */
@@ -107,7 +137,18 @@
         <input type="text" id="confirmationNumber" placeholder="Confirmation Number" required>
       </div>
       <button type="submit">Enter</button>
+      <p class="error-message" id="errorMessage">No reservation found with this confirmation number. Please try again.</p>
     </form>
+  </div>
+
+  <div class="booking-details" id="bookingDetails">
+    <h3>Booking Details</h3>
+    <p><strong>Guest Name:</strong> <span id="guestName"></span></p>
+    <p><strong>Email:</strong> <span id="email"></span></p>
+    <p><strong>Phone:</strong> <span id="phone"></span></p>
+    <p><strong>Room Type:</strong> <span id="roomType"></span></p>
+    <p><strong>Check-in Date:</strong> <span id="checkinDate"></span></p>
+    <p><strong>Check-out Date:</strong> <span id="checkoutDate"></span></p>
   </div>
 </div>
 
@@ -116,6 +157,12 @@
     event.preventDefault(); // Prevent form submission from reloading the page
 
     const confirmationNumber = document.getElementById("confirmationNumber").value;
+    const errorMessage = document.getElementById("errorMessage");
+    const bookingDetails = document.getElementById("bookingDetails");
+
+    // Reset error message and booking details display
+    errorMessage.style.display = "none";
+    bookingDetails.style.display = "none";
 
     if (!confirmationNumber) {
       alert("Please enter a confirmation number.");
@@ -129,28 +176,35 @@
         "Content-Type": "application/json",
       },
     })
-            .then(response => response.json())
+            .then(response => {
+              if (!response.ok) {
+                throw new Error("No reservation found.");
+              }
+              return response.json();
+            })
             .then(data => {
               if (data) {
-                // Save booking details to sessionStorage and redirect to summary page
-                sessionStorage.setItem("confirmationDetails", JSON.stringify(data));
-                window.location.href = "summaryconfirmation.html";
-              } else {
-                alert("No reservation found with this confirmation number.");
+                // Populate booking details
+                document.getElementById("guestName").textContent = `${data.myGuest.fname} ${data.myGuest.lname}`;
+                document.getElementById("email").textContent = data.myGuest.email;
+                document.getElementById("phone").textContent = data.myGuest.phoneNumber;
+                document.getElementById("roomType").textContent = data.roomtype;
+                document.getElementById("checkinDate").textContent = data.checkInTime;
+                document.getElementById("checkoutDate").textContent = data.checkOutTime;
+                // Show booking details
+                bookingDetails.style.display = "block";
               }
             })
             .catch(error => {
               console.error("Error fetching reservation details:", error);
-              alert("An error occurred while fetching your booking details. Please try again.");
+              errorMessage.style.display = "block";
             });
   });
-
-
 </script>
-
 <!-- Footer Section -->
 <div class="footer">
   &copy; 2024 Woods Inn, Inc
 </div>
 </body>
 </html>
+

@@ -232,6 +232,10 @@
             return;
         }
 
+        // Store dates in sessionStorage
+        sessionStorage.setItem("checkinDate", checkinDate);
+        sessionStorage.setItem("checkoutDate", checkoutDate);
+
         // Send data to backend via fetch
         fetch(`/api/bookings/available-rooms?checkIn=${checkinDate}&checkOut=${checkoutDate}&roomType=${roomType}`, {
             method: "GET",

@@ -152,7 +152,7 @@
       </div>
       <div class="form-group">
         <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" placeholder="123-456-7890" pattern="\d{3}-\d{3}-\d{4}"
+        <input type="tel" id="phone" placeholder="123-456-7890" maxlength="12" pattern="\d{3}-\d{3}-\d{4}"
                aria-label="Phone Number (Format: 123-456-7890)" required>
       </div>
     </div>
@@ -193,17 +193,20 @@
   // Retrieve selected room details from sessionStorage
   const bookingDetails = JSON.parse(sessionStorage.getItem("selectedRoom"));
 
-  // Format dates to show only the date (YYYY-MM-DD)
+  // Log the selected room for debugging
+  console.log("Selected Room:", bookingDetails);
+
+  // Format dates to ensure they are in YYYY-MM-DD format
   function formatDate(dateTime) {
-    return dateTime.split("T")[0]; // Extract only the date portion
+    return dateTime; // Assumes dateTime is already in the correct format
   }
 
-  // Validate that booking details exist and update the UI
-  if (bookingDetails && bookingDetails.roomId) {
+  // Validate and update the UI with booking details
+  if (bookingDetails && bookingDetails.roomID) {
     document.getElementById("room-type").textContent = bookingDetails.roomType === "Single" ? "Single Bed Room" : "Double Bed Room";
     document.getElementById("price").textContent = bookingDetails.roomType === "Single" ? "150" : "250";
-    document.getElementById("checkin-date").textContent = formatDate(bookingDetails.checkin); // Display only the date
-    document.getElementById("checkout-date").textContent = formatDate(bookingDetails.checkout); // Display only the date
+    document.getElementById("checkin-date").textContent = formatDate(bookingDetails.checkin);
+    document.getElementById("checkout-date").textContent = formatDate(bookingDetails.checkout);
   } else {
     alert("Booking information is missing. Please restart the process.");
     window.location.href = "/booking.html";
@@ -211,58 +214,44 @@
 
   // Handle confirm booking
   document.getElementById("confirm-button").addEventListener("click", function () {
-    // Gather guest and payment details
     const guestInfo = {
-      fName: document.getElementById("first-name").value,
-      lName: document.getElementById("last-name").value,
+      fname: document.getElementById("first-name").value,
+      lname: document.getElementById("last-name").value,
       email: document.getElementById("email").value,
       phoneNumber: document.getElementById("phone").value,
     };
 
     const paymentInfo = {
-      firstName: document.getElementById("cardholder-name").value.split(" ")[0], // Extract first name
-      lastName: document.getElementById("cardholder-name").value.split(" ")[1] || "", // Extract last name
+      firstName: document.getElementById("cardholder-name").value.split(" ")[0],
+      lastName: document.getElementById("cardholder-name").value.split(" ")[1] || "",
       cardNumber: document.getElementById("card-number").value,
       cvv: document.getElementById("cvv").value,
       expDate: document.getElementById("expiry-date").value,
     };
 
-    // Validate input fields
-    if (
-            !guestInfo.fName ||
-            !guestInfo.lName ||
-            !guestInfo.email ||
-            !guestInfo.phoneNumber ||
-            !paymentInfo.firstName ||
-            !paymentInfo.lastName ||
-            !paymentInfo.cardNumber ||
-            !paymentInfo.cvv ||
-            !paymentInfo.expDate
-    ) {
+    if (!guestInfo.fname || !guestInfo.lname || !guestInfo.email || !guestInfo.phoneNumber ||
+            !paymentInfo.firstName || !paymentInfo.lastName || !paymentInfo.cardNumber || !paymentInfo.cvv || !paymentInfo.expDate) {
       alert("Please fill out all fields.");
       return;
     }
 
-    // Check if booking details are missing
-    if (!bookingDetails || !bookingDetails.roomId) {
+    if (!bookingDetails || !bookingDetails.roomID) {
       alert("Room selection is missing. Please restart the booking process.");
       window.location.href = "/booking.html";
       return;
     }
 
-    // Prepare the payload i.e., the data that is going to backend
     const payload = {
-      roomID: bookingDetails.roomId,
-      checkInTime: `${bookingDetails.checkin}T16:00:00`, // Add default check-in time
-      checkOutTime: `${bookingDetails.checkout}T11:00:00`, // Add default check-out time
+      roomID: bookingDetails.roomID,
+      checkInTime: `${bookingDetails.checkin}T16:00:00`,
+      checkOutTime: `${bookingDetails.checkout}T11:00:00`,
       myGuest: guestInfo,
       myPayment: paymentInfo,
     };
 
-    // Debugging: Log the payload
-    console.log("Payload being sent:", payload);
+    // Log payload for debugging
+    console.log("Payload being sent:", JSON.stringify(payload));
 
-    // Send POST request to backend
     fetch("/api/bookings/create", {
       method: "POST",
       headers: {
@@ -280,9 +269,7 @@
               return response.json();
             })
             .then((data) => {
-              // Save confirmation details to sessionStorage
               sessionStorage.setItem("confirmationDetails", JSON.stringify(data));
-              // Redirect to summary page
               window.location.href = "summaryconfirmation.html";
             })
             .catch((error) => {

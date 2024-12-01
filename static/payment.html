@@ -212,13 +212,23 @@
         window.location.href = "/booking.html";
     }
 
+
     // Handle confirm booking
     document.getElementById("confirm-button").addEventListener("click", function () {
+        const phoneNumber = document.getElementById("phone").value;
+
+        // Validate phone number format
+        const phonePattern = /^\d{3}-\d{3}-\d{4}$/;
+        if (!phonePattern.test(phoneNumber)) {
+            alert("Please enter a valid phone number in the format 123-456-7890.");
+            return;
+        }
+
         const guestInfo = {
             fname: document.getElementById("first-name").value,
             lname: document.getElementById("last-name").value,
             email: document.getElementById("email").value,
-            phoneNumber: document.getElementById("phone").value,
+            phoneNumber: phoneNumber, // Use the formatted phone number
         };
 
         const paymentInfo = {
@@ -278,6 +288,9 @@
             });
     });
 </script>
+
+</body>
+</html>
 
 </body>
 </html>

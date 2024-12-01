@@ -232,26 +232,30 @@
       return;
     }
 
+    // Store dates in sessionStorage
+    sessionStorage.setItem("checkinDate", checkinDate);
+    sessionStorage.setItem("checkoutDate", checkoutDate);
+
     // Send data to backend via fetch
     fetch(`/api/bookings/available-rooms?checkIn=${checkinDate}&checkOut=${checkoutDate}&roomType=${roomType}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-  },
-})
-  .then(response => response.json())
-  .then(data => {
-    // Save the availability data in sessionStorage
-    sessionStorage.setItem("availableRooms", JSON.stringify(data));
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Save the availability data in sessionStorage
+      sessionStorage.setItem("availableRooms", JSON.stringify(data));
 
-    // Redirect to the availability page
-    window.location.href = "availability.html";
-  })
-  .catch(error => {
-    console.error("Error:", error);
-    alert("An error occurred while checking availability. Please try again.");
+      // Redirect to the availability page
+      window.location.href = "availability.html";
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      alert("An error occurred while checking availability. Please try again.");
+    });
   });
-});
 </script>
 
 </body>

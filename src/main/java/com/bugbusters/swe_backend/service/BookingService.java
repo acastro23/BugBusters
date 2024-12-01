@@ -130,7 +130,7 @@ public class BookingService {
     @Transactional
     public void cancelBooking(String confirmationNumber) {
         // Step 1: Find confirmation by confirmation number
-        Confirmation confirmation = myConfirmationRepository.findByConfNum(confirmationNumber)
+        Confirmation confirmation = myConfirmationRepository.findUniqueByConfNum(confirmationNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("Confirmation not found for number: " + confirmationNumber));
 
         Booking booking = myBookingRepository.findById(confirmation.getBookingID())
@@ -198,8 +198,9 @@ public class BookingService {
 
     @Transactional(readOnly = true)
     public BookingDTO getBookingDetails(String confNum) {
-        Confirmation myConfirmation = myConfirmationRepository.findByConfNum(confNum)
-                .orElseThrow(() -> new ResourceNotFoundException("Nothing found for the confirmation nmber: " + confNum));
+        Confirmation myConfirmation = myConfirmationRepository.findUniqueByConfNum(confNum)
+                .orElseThrow(() -> new ResourceNotFoundException("Nothing found for the confirmation number: " + confNum));
+
 
         Booking myBooking = myBookingRepository.findById(myConfirmation.getBookingID())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found for myConfirmation ID: " + myConfirmation.getBookingID()));

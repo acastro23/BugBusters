@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <style>
     /* Make the body and html take up the full height and use flexbox */
@@ -11,9 +11,11 @@
       flex-direction: column;
     }
 
-    /* Make the main content area flexible to push the footer down */
+    /* Main content area flexible to push footer down */
     .main-content {
       flex: 1;
+      text-align: center;
+      margin-top: 80px;
     }
 
     .navbar {
@@ -41,41 +43,33 @@
       color: black;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    .row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      margin-top: 80px;
-    }
-
-    .column {
-      width: 34%;
+    .room-info {
+      max-width: 600px;
+      margin: 0 auto;
       text-align: center;
     }
 
     img {
       width: 100%;
       height: auto;
+      border-radius: 8px;
     }
 
-    input[type="text"] {
-      width: 90%;
-      padding: 5px;
-      margin-top: 10px;
-    }
-
-    .centered-text {
-      text-align: center;
+    .room-price, .room-dates {
+      font-size: 18px;
       font-weight: bold;
+      margin-top: 10px;
     }
 
-    .button {
-      margin-top: 10px;
+    .room-number-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .room-number {
       padding: 10px 20px;
       background-color: #6F4E37;
       color: white;
@@ -85,26 +79,8 @@
       font-size: 16px;
     }
 
-    .button:hover {
+    .room-number:hover {
       background-color: #5a3e2f;
-    }
-
-    .amenities {
-      margin-top: 15px;
-      padding: 10px;
-      background-color: #f9f9f9;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      font-size: 14px;
-      color: #333;
-    }
-
-    .amenities h3 {
-      margin: 5px 0;
-      color: #6F4E37;
-      font-size: 16px;
     }
 
     /* Footer styling */
@@ -126,7 +102,12 @@
 
 <div class="main-content">
   <h2 class="centered-text">Available Rooms</h2>
-  <div id="room-container" class="row"></div>
+  <div class="room-info" id="room-info">
+    <!-- Room image and price will go here -->
+  </div>
+  <div class="room-number-container" id="room-number-container">
+    <!-- Dynamic room numbers will go here -->
+  </div>
 </div>
 
 <div class="footer">
@@ -134,55 +115,77 @@
 </div>
 
 <script>
-
-  // Retrieve available room data from sessionStorage
+  // Retrieve check-in and check-out dates from sessionStorage
+  const checkinDate = sessionStorage.getItem("checkinDate");
+  const checkoutDate = sessionStorage.getItem("checkoutDate");
   const availableRooms = JSON.parse(sessionStorage.getItem("availableRooms"));
 
-  // Get the container for room cards
-  const roomContainer = document.getElementById("room-container");
+  // Format the dates to display only the date (YYYY-MM-DD)
+  function formatDate(dateTime) {
+    return dateTime.split("T")[0]; // Extract only the date portion
+  }
 
+  // Get container elements
+  const roomInfo = document.getElementById("room-info");
+  const roomNumberContainer = document.getElementById("room-number-container");
 
   // Check if availableRooms data exists
   if (availableRooms && availableRooms.length > 0) {
-// Loop through available rooms and create room cards dynamically
+    // Extract common room details
+    const firstRoom = availableRooms[0];
+    const roomType = firstRoom.type === "Single" ? "One-bed Room" : "Two-bed Room";
+    const roomImage = firstRoom.type === "Single" ? "one-bed.png" : "two-bed.png";
+    const roomPrice = firstRoom.price;
+
+    // Display room info (image, price, and dates)
+    roomInfo.innerHTML = `
+        <img src="images/${roomImage}" alt="${roomType}">
+        <p class="room-price">Price: $${roomPrice} per night</p>
+        <p class="room-dates">Check-in: ${formatDate(checkinDate)}<br>Check-out: ${formatDate(checkoutDate)}</p>
+    `;
+
+    // Dynamically generate room numbers
     availableRooms.forEach(room => {
-      const column = document.createElement("div");
-      column.classList.add("column");
-
-      // Create room card based on room type
-      column.innerHTML = `
-    <img src="images/${room.type === 'Single' ? 'one-bed.png' : 'two-bed.png'}" alt="${room.type}-bed">
-    <p><b>${room.type === 'Single' ? 'One-bed Room' : 'Two-bed Room'}</b></p>
-    <p>Price: $${room.price} per night</p>
-    <p>Room Number: ${room.roomNumber}</p>
-    <button class="button" onclick="bookRoom(${room.roomId}, '${room.type}')">Book Now</button>
-  `;
-
-      // Append room card to the container
-      roomContainer.appendChild(column);
+      const roomButton = document.createElement("button");
+      roomButton.classList.add("room-number");
+      roomButton.textContent = `Room ${room.roomNumber}`;
+      roomButton.onclick = () => bookRoom(room.roomID, room.type, checkinDate, checkoutDate); // Attach click handler
+      roomNumberContainer.appendChild(roomButton);
     });
   } else {
-// Display a message if no rooms are available
-    roomContainer.innerHTML = `
-  <p class="centered-text">No rooms available for the selected dates.</p>
-  <p class="centered-text">Please try other dates or contact us for assistance.</p>
-`;
+    // Display a message if no rooms are available
+    roomInfo.innerHTML = `
+        <p class="centered-text">No rooms available for the selected dates.</p>
+        <p class="centered-text">Please try other dates or contact us for assistance.</p>
+    `;
   }
 
   // Function to handle room booking
-  function bookRoom(roomId, roomType) {
-    sessionStorage.setItem("selectedRoom", JSON.stringify({ roomId, roomType }));
+  function bookRoom(roomID, roomType) {
+    // Store room details in sessionStorage
+    const checkinDate = sessionStorage.getItem("checkinDate"); // Retrieve stored check-in date
+    const checkoutDate = sessionStorage.getItem("checkoutDate"); // Retrieve stored check-out date
+
+    if (!checkinDate || !checkoutDate) {
+      alert("Check-in or check-out date is missing. Please restart the booking process.");
+      window.location.href = "/booking.html";
+      return;
+    }
+
+    sessionStorage.setItem(
+            "selectedRoom",
+            JSON.stringify({
+              roomID: roomID,
+              roomType: roomType,
+              checkin: checkinDate.split("T")[0], // Only the date part
+              checkout: checkoutDate.split("T")[0], // Only the date part
+            })
+    );
+
+    // Redirect to payment.html
     window.location.href = "payment.html";
   }
-
 </script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-

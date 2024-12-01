@@ -9,7 +9,6 @@
       padding: 0;
       height: 100%;
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
       display: flex;
       flex-direction: column;
     }
@@ -118,6 +117,8 @@
       text-align: center;
       padding: 10px 0;
       font-size: 14px;
+      width: 100%;
+      margin-top: auto;
     }
   </style>
 </head>
@@ -148,13 +149,15 @@
     <p><strong>Email:</strong> <span id="email"></span></p>
     <p><strong>Phone:</strong> <span id="phone"></span></p>
     <p><strong>Room ID:</strong> <span id="roomID"></span></p>
+    <p><strong>Room Type:</strong> <span id="roomType"></span></p>
+    <p><strong>Price:</strong> <span id="price"></span></p>
     <p><strong>Check-in Date:</strong> <span id="checkinDate"></span></p>
     <p><strong>Check-out Date:</strong> <span id="checkoutDate"></span></p>
   </div>
 </div>
 
 <script>
-  document.getElementById("confirmationForm").addEventListener("submit", function (event) {
+document.getElementById("confirmationForm").addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent form submission from reloading the page
 
     const confirmationNumber = document.getElementById("confirmationNumber").value;
@@ -185,44 +188,50 @@
     })
     .then(data => {
         if (data) {
-
-          function formatDate(datetime) {
-                return datetime.split("T")[0]; // Output check-in and check-out dates, not time
+            function formatDate(datetime) {
+                return datetime.split("T")[0]; // Extract only the date
             }
 
-
-            // Populate booking details
+            // Populate guest and booking details
             document.getElementById("guestName").textContent = `${data.myGuest.fname} ${data.myGuest.lname}`;
             document.getElementById("email").textContent = data.myGuest.email;
             document.getElementById("phone").textContent = data.myGuest.phoneNumber;
-            document.getElementById("roomID").textContent = data.roomID;
             document.getElementById("checkinDate").textContent = formatDate(data.checkInTime);
             document.getElementById("checkoutDate").textContent = formatDate(data.checkOutTime);
 
-            // Show booking details
-            bookingDetails.style.display = "block";
-
-            // Debug room info
-            console.log("API Response:", data)
+            // Fetch room details using roomID
+            return fetch(`/api/rooms/${data.roomID}`);
         } else {
-            document.getElementById("guestName").textContent = "Details missing";
-            document.getElementById("email").textContent = "Details missing";
-            document.getElementById("phone").textContent = "Details missing";
-            document.getElementById("roomID").textContent = "Details missing";
-            document.getElementById("checkinDate").textContent = "Details missing";
-            document.getElementById("checkoutDate").textContent = "Details missing";
-            }
+            throw new Error("Booking details are incomplete.");
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Room details could not be retrieved.");
+        }
+        return response.json();
+    })
+    .then(roomData => {
+        // Populate room details
+        document.getElementById("roomID").textContent = roomData.roomID;
+        document.getElementById("roomType").textContent = roomData.type;
+        document.getElementById("price").textContent = `$${roomData.price}`;
+
+        // Show booking details
+        bookingDetails.style.display = "block";
     })
     .catch(error => {
         console.error("Error fetching reservation details:", error);
         errorMessage.style.display = "block";
     });
-  });
+});
+
 </script>
 
 <!-- Footer Section -->
 <div class="footer">
   &copy; 2024 Woods Inn, Inc
 </div>
+
 </body>
 </html>

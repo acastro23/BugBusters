@@ -205,7 +205,7 @@
   // Initialize flatpickr
   const checkin = flatpickr("#checkinDate", {
     dateFormat: "Y-m-d",
-    minDate: "tomorrow",
+    minDate: new Date().fp_inc(1), // User can't check-in same day
     onChange: function(selectedDates, dateStr, instance) {
       checkout.set("minDate", dateStr);
     }

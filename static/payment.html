@@ -174,7 +174,7 @@
             </div>
             <div class="form-group">
                 <label for="expiry-date">Expiration Date</label>
-                <input type="text" id="expiry-date" placeholder="MM/YY" pattern="\d{2}/\d{2}"
+                <input type="text" id="expiry-date" placeholder="MM/YY" maxlength="5" pattern="\d{2}/\d{2}"
                        aria-label="Card Expiration Date (MM/YY)" required>
             </div>
         </div>
@@ -212,10 +212,10 @@
         window.location.href = "/booking.html";
     }
 
-
     // Handle confirm booking
     document.getElementById("confirm-button").addEventListener("click", function () {
         const phoneNumber = document.getElementById("phone").value;
+        const expirationDate = document.getElementById("expiry-date").value;
 
         // Validate phone number format
         const phonePattern = /^\d{3}-\d{3}-\d{4}$/;
@@ -224,6 +224,13 @@
             return;
         }
 
+        // Validate expiration date format
+        const expDatePattern = /^\d{2}\/\d{2}$/;
+        if (!expDatePattern.test(expirationDate)) {
+            alert("Please enter a valid expiration date in the format MM/YY.");
+            return;
+        }
+        
         const guestInfo = {
             fname: document.getElementById("first-name").value,
             lname: document.getElementById("last-name").value,
@@ -280,7 +287,7 @@
             })
             .then((data) => {
                 sessionStorage.setItem("confirmationDetails", JSON.stringify(data));
-                window.location.href = "summaryconfirmation.html";
+                window.location.href = "confirmation.html";
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -288,9 +295,6 @@
             });
     });
 </script>
-
-</body>
-</html>
 
 </body>
 </html>

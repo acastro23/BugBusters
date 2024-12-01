@@ -150,7 +150,7 @@
     <div class="room-card">
       <img src="images/one-bed.png" alt="One-bed Room">
       <p><b>One-bed Room</b></p>
-      <p>$100 per night</p>
+      <p>$150 per night</p>
       <div class="amenities">
         <h3>Amenities</h3>
         <p>Free Wi-Fi</p>
@@ -165,7 +165,7 @@
     <div class="room-card">
       <img src="images/two-bed.png" alt="Two-bed Room">
       <p><b>Two-bed Room</b></p>
-      <p>$130 per night</p>
+      <p>$250 per night</p>
       <div class="amenities">
         <h3>Amenities</h3>
         <p>Free Wi-Fi</p>
@@ -186,8 +186,8 @@
       <div class="form-field">
         <label for="roomType">Room Type</label>
         <select id="roomType" required>
-          <option value="single">Single Bed</option>
-          <option value="double">Double Bed</option>
+          <option value="Single">Single Bed</option>
+          <option value="Double">Double Bed</option>
         </select>
       </div>
       <button type="button" id="checkAvailability" class="button">Check Availability</button>
@@ -206,9 +206,6 @@
   const checkin = flatpickr("#checkinDate", {
     dateFormat: "Y-m-d",
     minDate: "tomorrow",
-    defaultHour: 16, // Default check-in is 1600
-    defaultMinute: 0, // Default is 0 minutes
-    enableTime: false, 
     onChange: function(selectedDates, dateStr, instance) {
       checkout.set("minDate", dateStr);
     }
@@ -217,16 +214,17 @@
   const checkout = flatpickr("#checkoutDate", {
     dateFormat: "Y-m-d",
     minDate: new Date(),
-    defaultHour: 11, // Default hour is checkout is 1100
-    defaultMinute: 0, // Default is 0 minutes
-    enableTime: false 
   });
 
   // Handle form submission
   document.getElementById("checkAvailability").addEventListener("click", function () {
-    const checkinDate = document.getElementById("checkinDate").value; // Get check-in date
-    const checkoutDate = document.getElementById("checkoutDate").value; // Get check-out date
+    let checkinDate = document.getElementById("checkinDate").value; // Get check-in date
+    let checkoutDate = document.getElementById("checkoutDate").value; // Get check-out date
     const roomType = document.getElementById("roomType").value; // Get selected room type
+
+    // Append default times to dates
+    checkinDate += "T16:00:00"; // Set default check-in time to 4:00 pm
+    checkoutDate += "T11:00:00"; // Set default check-out time to 11:00 am
 
     // Validate input
     if (!checkinDate || !checkoutDate || !roomType) {
@@ -254,8 +252,7 @@
     alert("An error occurred while checking availability. Please try again.");
   });
 });
-
 </script>
+
 </body>
 </html>
-

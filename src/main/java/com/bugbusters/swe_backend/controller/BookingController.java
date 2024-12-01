@@ -2,7 +2,6 @@ package com.bugbusters.swe_backend.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import com.bugbusters.swe_backend.dto.BookingDTO;
 import com.bugbusters.swe_backend.entity.Confirmation;
 import com.bugbusters.swe_backend.repository.ConfirmationRepository;
@@ -11,11 +10,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.bugbusters.swe_backend.entity.Booking;
-import com.bugbusters.swe_backend.entity.Guest;
 import com.bugbusters.swe_backend.entity.Room;
-import com.bugbusters.swe_backend.exception.ResourceNotFoundException;
 import com.bugbusters.swe_backend.repository.GuestRepository;
 import com.bugbusters.swe_backend.repository.RoomRepository;
 import com.bugbusters.swe_backend.service.BookingService;
@@ -69,7 +65,7 @@ public class BookingController {
     }
 
 
-    //AC1127 -- I was working on an update functionaliy, ignore this.
+    //AC1127 -- I was working on an update functionality, ignore this.
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Booking> updateBooking(
@@ -106,9 +102,9 @@ public class BookingController {
 
 
     /*
-    AC1126 -- This endpoint is for the calndar feature, so the guest will start by selecting their check-in and check-out date, and also select their desired
+    AC1126 -- This endpoint is for the calendar feature, so the guest will start by selecting their check-in and check-out date, and also select their desired
     room type. The front-end sends all the required info to the back-end, and the back-end will return a list of rooms available that you can then display
-    to the guest. Rooms that are booked for the seleced dates are not shown
+    to the guest. Rooms that are booked for the selected dates are not shown
     */
 
     @GetMapping("/available-rooms")

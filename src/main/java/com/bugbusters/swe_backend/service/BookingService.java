@@ -31,10 +31,10 @@ public class BookingService {
     private PaymentRepository myPaymentRepository;
 
     @Autowired
-    private PaymentService myPaymentService;
+    private ConfirmationRepository myConfirmationRepository;
 
     @Autowired
-    private ConfirmationRepository myConfirmationRepository;
+    private GuestService myGuestService;
 
 
     /*
@@ -43,59 +43,50 @@ public class BookingService {
     */
 
     @Transactional
-    public BookingDTO createBooking(BookingDTO bookingDTO) {
-        Guest guest;
-        if (bookingDTO.getGuestID() != null) {
-            guest = myGuestRepository.findById(bookingDTO.getGuestID())
-                    .orElseThrow(() -> new ResourceNotFoundException("Guest not found with ID: " + bookingDTO.getGuestID()));
-        } else if (bookingDTO.getMyGuest() != null) {
-            guest = createNewGuest(bookingDTO.getMyGuest());
-        } else {
-            throw new IllegalArgumentException("Guest information is required to create a booking.");
+    public BookingDTO createBooking(BookingDTO myBookingDTO) {
+
+        Guest myGuest = (myBookingDTO.getGuestID() != null)
+                ? myGuestRepository.findById(myBookingDTO.getGuestID())
+                .orElseThrow(() -> new ResourceNotFoundException("Guest not found with ID: " + myBookingDTO.getGuestID()))
+                : myGuestService.createOrReuseGuest(myBookingDTO.getMyGuest());
+
+        Room myRoom = myRoomRepository.findById(myBookingDTO.getRoomID())
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID: " + myBookingDTO.getRoomID()));
+
+        if (!isRoomAvailable(myRoom.getRoomID(), myBookingDTO.getCheckInTime(), myBookingDTO.getCheckOutTime())) {
+            throw new RoomUnavailableException("That Room is unavailable for the chosen dates. Please try another Room.");
         }
 
-        Room room = myRoomRepository.findById(bookingDTO.getRoomID())
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID: " + bookingDTO.getRoomID()));
-
-        if (!isRoomAvailable(room.getRoomID(), bookingDTO.getCheckInTime(), bookingDTO.getCheckOutTime())) {
-            throw new RoomUnavailableException("Room is unavailable for the selected dates.");
+        Payment myPayment = null;
+        if (myBookingDTO.getMyPayment() != null) {
+            PaymentDTO myPaymentDTO = myBookingDTO.getMyPayment();
+            myPayment = new Payment();
+            myPayment.setGuest(myGuest);
+            myPayment.setCardNumber(myPaymentDTO.getCardNumber());
+            myPayment.setCvv(myPaymentDTO.getCvv());
+            myPayment.setExpDate(myPaymentDTO.getExpDate());
+            myPayment.setFirstName(myPaymentDTO.getFirstName());
+            myPayment.setLastName(myPaymentDTO.getLastName());
+            myPaymentRepository.save(myPayment);
         }
 
-        Payment payment = null;
-        if (bookingDTO.getMyPayment() != null) {
-            PaymentDTO paymentDTO = bookingDTO.getMyPayment();
-            payment = new Payment();
-            payment.setGuest(guest);
-            payment.setCardNumber(paymentDTO.getCardNumber());
-            payment.setCvv(paymentDTO.getCvv());
-            payment.setExpDate(paymentDTO.getExpDate());
-            payment.setFirstName(paymentDTO.getFirstName());
-            payment.setLastName(paymentDTO.getLastName());
-            myPaymentRepository.save(payment);
-        }
+        Booking myBooking = new Booking();
+        myBooking.setMyGuest(myGuest);
+        myBooking.setMyRoom(myRoom);
+        myBooking.setCheckInTime(myBookingDTO.getCheckInTime());
+        myBooking.setCheckOutTime(myBookingDTO.getCheckOutTime());
+        Booking savedBooking = myBookingRepository.save(myBooking);
 
-        // AC1127 -- So after payment and guest stuff is validated, the booking is made, room availability is set to false
-        room.setAvailability(false);
-        myRoomRepository.save(room);
-
-        Booking booking = new Booking();
-        booking.setMyGuest(guest);
-        booking.setMyRoom(room);
-        booking.setCheckInTime(bookingDTO.getCheckInTime());
-        booking.setCheckOutTime(bookingDTO.getCheckOutTime());
-        Booking savedBooking = myBookingRepository.save(booking);
-
-        // AC1127 -- and once booking is saved, the confirmation number is generated through another method
-        String confNumber = generateConfirmationNumber();
+        String confNumber = makeConfNum();
         Confirmation confirmation = new Confirmation();
         confirmation.setBookingID(savedBooking.getBookingID());
         confirmation.setConfNum(confNumber);
         myConfirmationRepository.save(confirmation);
 
         BookingDTO responseDTO = new BookingDTO();
-        responseDTO.setGuestID(guest.getGuestID());
-        responseDTO.setMyGuest(mapGuestToDTO(guest));
-        responseDTO.setRoomID(room.getRoomID());
+        responseDTO.setGuestID(myGuest.getGuestID());
+        responseDTO.setMyGuest(mapGuestToDTO(myGuest));
+        responseDTO.setRoomID(myRoom.getRoomID());
         responseDTO.setCheckInTime(savedBooking.getCheckInTime());
         responseDTO.setCheckOutTime(savedBooking.getCheckOutTime());
         responseDTO.setConfirmationNumber(confNumber);
@@ -104,33 +95,31 @@ public class BookingService {
     }
 
 
-
-
     //AC1127 -- This method actually generates the confirmation number once a booking is saved, it's a randomly generated 16 character string
-    private String generateConfirmationNumber() {
+    private String makeConfNum() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 16).toUpperCase();
     }
 
 
     //AC1127 -- Ignore this method, still seeing if I can implement and update system using a confirmation number
     public Booking updateBooking(Long bookingID, BookingDTO bookingDTO) {
-        Booking booking = myBookingRepository.findById(bookingID)
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with ID: " + bookingID));
+        Booking myBooking = myBookingRepository.findById(bookingID)
+                .orElseThrow(() -> new ResourceNotFoundException("There was no booking found with ID: " + bookingID));
 
         if (bookingDTO.getRoomID() != null) {
             Room room = myRoomRepository.findById(bookingDTO.getRoomID())
                     .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID: " + bookingDTO.getRoomID()));
-            booking.setMyRoom(room);
+            myBooking.setMyRoom(room);
         }
 
         if (bookingDTO.getCheckInTime() != null) {
-            booking.setCheckInTime(bookingDTO.getCheckInTime());
+            myBooking.setCheckInTime(bookingDTO.getCheckInTime());
         }
         if (bookingDTO.getCheckOutTime() != null) {
-            booking.setCheckOutTime(bookingDTO.getCheckOutTime());
+            myBooking.setCheckOutTime(bookingDTO.getCheckOutTime());
         }
 
-        return myBookingRepository.save(booking);
+        return myBookingRepository.save(myBooking);
     }
 
 
@@ -183,51 +172,51 @@ public class BookingService {
     }
 
     //AC1127 -- The next two methods just converts the entities into DTO objects
-    private GuestDTO mapGuestToDTO(Guest guest) {
-        GuestDTO guestDTO = new GuestDTO();
-        guestDTO.setFname(guest.getFName());
-        guestDTO.setLname(guest.getLName());
-        guestDTO.setEmail(guest.getEmail());
-        guestDTO.setPhoneNumber(guest.getPhoneNumber());
-        return guestDTO;
+    private GuestDTO mapGuestToDTO(Guest myGuest) {
+        GuestDTO myGuestDTO = new GuestDTO();
+        myGuestDTO.setFname(myGuest.getFName());
+        myGuestDTO.setLname(myGuest.getLName());
+        myGuestDTO.setEmail(myGuest.getEmail());
+        myGuestDTO.setPhoneNumber(myGuest.getPhoneNumber());
+        return myGuestDTO;
     }
 
 
     private PaymentDTO mapPaymentToDTO(Payment payment) {
-        PaymentDTO paymentDTO = new PaymentDTO();
-        paymentDTO.setFirstName(payment.getFirstName());
-        paymentDTO.setLastName(payment.getLastName());
-        paymentDTO.setExpDate(payment.getExpDate());
-        return paymentDTO;
+        PaymentDTO myPaymentDTO = new PaymentDTO();
+        myPaymentDTO.setFirstName(payment.getFirstName());
+        myPaymentDTO.setLastName(payment.getLastName());
+        myPaymentDTO.setExpDate(payment.getExpDate());
+        return myPaymentDTO;
     }
 
 
     /*
         AC1127 -- This method handles booking details that will be sent to frontend when teh guest wants to see their booking details
-        room, gueest, and payment info is sent based on the confirmation number
+        room, guest, and payment info is sent based on the confirmation number
     */
 
     @Transactional(readOnly = true)
     public BookingDTO getBookingDetails(String confNum) {
-        Confirmation confirmation = myConfirmationRepository.findByConfNum(confNum)
-                .orElseThrow(() -> new ResourceNotFoundException("Confirmation not found for number: " + confNum));
+        Confirmation myConfirmation = myConfirmationRepository.findByConfNum(confNum)
+                .orElseThrow(() -> new ResourceNotFoundException("Nothing found for the confirmation nmber: " + confNum));
 
-        Booking booking = myBookingRepository.findById(confirmation.getBookingID())
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found for confirmation ID: " + confirmation.getBookingID()));
+        Booking myBooking = myBookingRepository.findById(myConfirmation.getBookingID())
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found for myConfirmation ID: " + myConfirmation.getBookingID()));
 
-        Guest guest = booking.getMyGuest();
-        Payment payment = myPaymentRepository.findByGuest_GuestID(guest.getGuestID())
+        Guest myGuest = myBooking.getMyGuest();
+        Payment payment = myPaymentRepository.findByGuest_GuestID(myGuest.getGuestID())
                 .orElse(null);
 
-        BookingDTO bookingDTO = new BookingDTO();
-        bookingDTO.setGuestID(guest.getGuestID());
-        bookingDTO.setMyGuest(mapGuestToDTO(guest));
-        bookingDTO.setRoomID(booking.getMyRoom().getRoomID());
-        bookingDTO.setCheckInTime(booking.getCheckInTime());
-        bookingDTO.setCheckOutTime(booking.getCheckOutTime());
-        bookingDTO.setMyPayment(payment != null ? mapPaymentToDTO(payment) : null);
-        bookingDTO.setConfirmationNumber(confNum);
+        BookingDTO myBookingDTO = new BookingDTO();
+        myBookingDTO.setGuestID(myGuest.getGuestID());
+        myBookingDTO.setMyGuest(mapGuestToDTO(myGuest));
+        myBookingDTO.setRoomID(myBooking.getMyRoom().getRoomID());
+        myBookingDTO.setCheckInTime(myBooking.getCheckInTime());
+        myBookingDTO.setCheckOutTime(myBooking.getCheckOutTime());
+        myBookingDTO.setMyPayment(payment != null ? mapPaymentToDTO(payment) : null);
+        myBookingDTO.setConfirmationNumber(confNum);
 
-        return bookingDTO;
+        return myBookingDTO;
     }
 }

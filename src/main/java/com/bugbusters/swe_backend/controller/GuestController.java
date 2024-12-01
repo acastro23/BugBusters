@@ -43,7 +43,7 @@ public class GuestController {
 
     @PostMapping
     public ResponseEntity<Guest> createGuest(@Valid @RequestBody GuestDTO guestDTO) {
-        Guest createdGuest = guestService.createGuest(guestDTO);
+        Guest createdGuest = guestService.createOrReuseGuest(guestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdGuest);
     }
 

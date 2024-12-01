@@ -55,7 +55,7 @@
             border-radius: 8px;
         }
 
-        .room-price {
+        .room-price, .room-dates {
             font-size: 18px;
             font-weight: bold;
             margin-top: 10px;
@@ -115,8 +115,15 @@
 </div>
 
 <script>
-// Retrieve available room data from sessionStorage
+// Retrieve check-in and check-out dates from sessionStorage
+const checkinDate = sessionStorage.getItem("checkinDate");
+const checkoutDate = sessionStorage.getItem("checkoutDate");
 const availableRooms = JSON.parse(sessionStorage.getItem("availableRooms"));
+
+// Format the dates to display only the date (YYYY-MM-DD)
+function formatDate(dateTime) {
+    return dateTime.split("T")[0]; // Extract only the date portion
+}
 
 // Get container elements
 const roomInfo = document.getElementById("room-info");
@@ -130,10 +137,11 @@ if (availableRooms && availableRooms.length > 0) {
     const roomImage = firstRoom.type === "Single" ? "one-bed.png" : "two-bed.png";
     const roomPrice = firstRoom.price;
 
-    // Display room info (image and price)
+    // Display room info (image, price, and dates)
     roomInfo.innerHTML = `
         <img src="images/${roomImage}" alt="${roomType}">
         <p class="room-price">Price: $${roomPrice} per night</p>
+        <p class="room-dates">Check-in: ${formatDate(checkinDate)}<br>Check-out: ${formatDate(checkoutDate)}</p>
     `;
 
     // Dynamically generate room numbers
@@ -141,7 +149,7 @@ if (availableRooms && availableRooms.length > 0) {
         const roomButton = document.createElement("button");
         roomButton.classList.add("room-number");
         roomButton.textContent = `Room ${room.roomNumber}`;
-        roomButton.onclick = () => bookRoom(room.roomID, room.type); // Attach click handler
+        roomButton.onclick = () => bookRoom(room.roomID, room.type, checkinDate, checkoutDate); // Attach click handler
         roomNumberContainer.appendChild(roomButton);
     });
 } else {
@@ -154,13 +162,32 @@ if (availableRooms && availableRooms.length > 0) {
 
 // Function to handle room booking
 function bookRoom(roomID, roomType) {
-    sessionStorage.setItem("selectedRoom", JSON.stringify({ roomID, roomType }));
+    // Store room details in sessionStorage
+    const checkinDate = sessionStorage.getItem("checkinDate"); // Retrieve stored check-in date
+    const checkoutDate = sessionStorage.getItem("checkoutDate"); // Retrieve stored check-out date
+
+    if (!checkinDate || !checkoutDate) {
+        alert("Check-in or check-out date is missing. Please restart the booking process.");
+        window.location.href = "/booking.html";
+        return;
+    }
+
+    sessionStorage.setItem(
+        "selectedRoom",
+        JSON.stringify({
+            roomId: roomID,
+            roomType: roomType,
+            checkin: checkinDate.split("T")[0], // Only the date part
+            checkout: checkoutDate.split("T")[0], // Only the date part
+        })
+    );
+
+    // Redirect to payment.html
     window.location.href = "payment.html";
 }
 </script>
 
 </body>
 </html>
-
 
 

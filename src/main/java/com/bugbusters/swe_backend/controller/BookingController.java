@@ -2,7 +2,6 @@ package com.bugbusters.swe_backend.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import com.bugbusters.swe_backend.dto.BookingDTO;
 import com.bugbusters.swe_backend.entity.Confirmation;
 import com.bugbusters.swe_backend.repository.ConfirmationRepository;
@@ -11,11 +10,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.bugbusters.swe_backend.entity.Booking;
-import com.bugbusters.swe_backend.entity.Guest;
 import com.bugbusters.swe_backend.entity.Room;
-import com.bugbusters.swe_backend.exception.ResourceNotFoundException;
 import com.bugbusters.swe_backend.repository.GuestRepository;
 import com.bugbusters.swe_backend.repository.RoomRepository;
 import com.bugbusters.swe_backend.service.BookingService;

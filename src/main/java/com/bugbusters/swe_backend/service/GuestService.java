@@ -14,41 +14,40 @@ import java.util.Optional;
 // yes
 @Service
 public class GuestService {
-    private final GuestRepository guestRepository;
+    private final GuestRepository myGuestRepository;
 
     //
     public GuestService(GuestRepository guestRepository) {
-        this.guestRepository = guestRepository;
+        this.myGuestRepository = guestRepository;
     }
 
 
     public List<Guest> getAllGuests() {
-        return guestRepository.findAll();
+        return myGuestRepository.findAll();
     }
 
 
     public Optional<Guest> getGuestById(Long id) {
-        return guestRepository.findById(id);
+        return myGuestRepository.findById(id);
     }
 
 
     public void deleteGuest(Long id) {
-        guestRepository.deleteById(id);
+        myGuestRepository.deleteById(id);
     }
 
 
-    public Guest createGuest(GuestDTO guestDTO) {
-        if (guestRepository.findByEmail(guestDTO.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("A guest with this email already exists.");
+    public Guest createOrReuseGuest(GuestDTO guestDTO) {
+        Optional<Guest> existingGuest = myGuestRepository.findByEmail(guestDTO.getEmail());
+        if (existingGuest.isPresent()) {
+            return existingGuest.get();
         }
-
-        Guest guest = new Guest();
-        guest.setFName(guestDTO.getFname());
-        guest.setLName(guestDTO.getLname());
-        guest.setEmail(guestDTO.getEmail());
-        guest.setPhoneNumber(guestDTO.getPhoneNumber());
-
-        return guestRepository.save(guest);
+        Guest myGuest = new Guest();
+        myGuest.setFName(guestDTO.getFname());
+        myGuest.setLName(guestDTO.getLname());
+        myGuest.setEmail(guestDTO.getEmail());
+        myGuest.setPhoneNumber(guestDTO.getPhoneNumber());
+        return myGuestRepository.save(myGuest);
     }
 
 
@@ -59,14 +58,14 @@ public class GuestService {
         If a guest is not found, a ResourceNotFoundException will be thrown
     */
     public Guest updateGuest(Long id, GuestDTO guestDTO) {
-        Optional<Guest> optionalGuest = guestRepository.findById(id);
+        Optional<Guest> optionalGuest = myGuestRepository.findById(id);
         if (optionalGuest.isPresent()) {
             Guest guest = optionalGuest.get();
             guest.setFName(guestDTO.getFname());
             guest.setLName(guestDTO.getLname());
             guest.setEmail(guestDTO.getEmail());
             guest.setPhoneNumber(guestDTO.getPhoneNumber());
-            return guestRepository.save(guest);
+            return myGuestRepository.save(guest);
         } else {
             throw new ResourceNotFoundException("Guest with ID " + id + " not found");
         }

@@ -175,10 +175,10 @@ function bookRoom(roomID, roomType) {
     sessionStorage.setItem(
         "selectedRoom",
         JSON.stringify({
-            roomId: roomID,
+            roomID: roomID,
             roomType: roomType,
             checkin: checkinDate.split("T")[0], // Only the date part
-            checkout: checkoutDate.split("T")[0], // Only the date part
+            checkout: checkoutDate.split("T")[0], // Only the date part 
         })
     );
 
@@ -189,5 +189,4 @@ function bookRoom(roomID, roomType) {
 
 </body>
 </html>
-
 

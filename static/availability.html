@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* Make the body and html take up the full height and use flexbox */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Main content area flexible to push footer down */
+        .main-content {
+            flex: 1;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #6F4E37;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            height: 60px;
+        }
+
+        .navbar a {
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .navbar a:hover {
+            background: #ddd;
+            color: black;
+        }
+
+        .room-info {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .room-price {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .room-number-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .room-number {
+            padding: 10px 20px;
+            background-color: #6F4E37;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .room-number:hover {
+            background-color: #5a3e2f;
+        }
+
+        /* Footer styling */
+        .footer {
+            background-color: #6F4E37;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <a href="home.html">Home</a>
+    <a href="booking.html">Reserve Your Stay</a>
+    <a href="confirmation.html">Look up reservation</a>
+</div>
+
+<div class="main-content">
+    <h2 class="centered-text">Available Rooms</h2>
+    <div class="room-info" id="room-info">
+        <!-- Room image and price will go here -->
+    </div>
+    <div class="room-number-container" id="room-number-container">
+        <!-- Dynamic room numbers will go here -->
+    </div>
+</div>
+
+<div class="footer">
+    &copy; 2024 Woods Inn, Inc
+</div>
+
+<script>
+// Retrieve available room data from sessionStorage
+const availableRooms = JSON.parse(sessionStorage.getItem("availableRooms"));
+
+// Get container elements
+const roomInfo = document.getElementById("room-info");
+const roomNumberContainer = document.getElementById("room-number-container");
+
+// Check if availableRooms data exists
+if (availableRooms && availableRooms.length > 0) {
+    // Extract common room details
+    const firstRoom = availableRooms[0];
+    const roomType = firstRoom.type === "Single" ? "One-bed Room" : "Two-bed Room";
+    const roomImage = firstRoom.type === "Single" ? "one-bed.png" : "two-bed.png";
+    const roomPrice = firstRoom.price;
+
+    // Display room info (image and price)
+    roomInfo.innerHTML = `
+        <img src="images/${roomImage}" alt="${roomType}">
+        <p class="room-price">Price: $${roomPrice} per night</p>
+    `;
+
+    // Dynamically generate room numbers
+    availableRooms.forEach(room => {
+        const roomButton = document.createElement("button");
+        roomButton.classList.add("room-number");
+        roomButton.textContent = `Room ${room.roomNumber}`;
+        roomButton.onclick = () => bookRoom(room.roomID, room.type); // Attach click handler
+        roomNumberContainer.appendChild(roomButton);
+    });
+} else {
+    // Display a message if no rooms are available
+    roomInfo.innerHTML = `
+        <p class="centered-text">No rooms available for the selected dates.</p>
+        <p class="centered-text">Please try other dates or contact us for assistance.</p>
+    `;
+}
+
+// Function to handle room booking
+function bookRoom(roomID, roomType) {
+    sessionStorage.setItem("selectedRoom", JSON.stringify({ roomID, roomType }));
+    window.location.href = "payment.html";
+}
+</script>
+
+</body>
+</html>
+
+
+

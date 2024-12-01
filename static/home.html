@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-color: #6F4E37;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .navbar a:hover {
+            background: #ddd;
+            color: black;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 80px;
+        }
+        .column {
+            width: 34%;
+            text-align: center;
+        }
+        .about-cont {
+            font-size: 11px;
+            color: #6F4E37;
+            text-align: center;
+            text-align: left;
+            margin-left: -180px;
+        }
+        /* About sections */
+        .about-section {
+            padding: 18px;
+            text-align: center;
+            background-color: #f9f9f9;
+            color: #6F4E37;
+            /* border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 800px; */
+        }
+        .about-section h2 {
+            font-size: 28px;
+            color: #6F4E37;
+        }
+        .about-section p {
+            font-size: 18px;
+            color: #333;
+            margin-top: 10px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+        }
+        input[type="text"] {
+            width: 90%;
+            padding: 5px;
+            margin-top: 10px;
+        }
+        .centered-text {
+            text-align: center;
+            font-weight: bold;
+        }
+        /* Padding for the text */
+        .scrollable-images-text {
+            text-align: center;
+            background-color: #6F4E37;
+            color: white;
+            padding: 20px;
+            font-size: 18px;
+        }
+        /* Scrollable image container */
+        .scroll-container {
+            background-color: #6F4E37;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px;
+        }
+        /* Images in the scrollable container */
+        .scroll-container img {
+            padding: 5px;
+            width: 500px;
+            height: auto;
+        }
+        /* Footer styling */
+        .footer {
+            background-color: #6F4E37;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="navbar">
+    <a href="booking.html">Reserve Your Stay</a>
+    <a href="confirmation.html">Look up reservation</a>
+    <a href="founders.html">Founders</a>
+</div>
+
+<div class="row">
+    <div class="column">
+        <img src="images/woods-in1.png" alt="Snow" style="width:100%">
+    </div>
+    <div class="column">
+        <img src="images/woods-in2.png" alt="Forest" style="width:100%">
+    </div>
+    <div class="column">
+        <img src="images/woods-in3.png" alt="Mountains" style="width:100%">
+    </div>
+</div>
+
+<!-- About Woods In Section -->
+<div class="about-section">
+    <h2>Woods Inn</h2>
+    <p>At Woods Inn, we are dedicated to providing you with the best travel experience from start to finish. Discover a curated selection of cozy cabins, unique hotels, and serene getaways, all designed to make your stay unforgettable and connect with nature. With easy booking options, Woods Inn makes finding the perfect place to unwind and enjoy simple. Explore, book, and relax—all in one place!</p>
+</div>
+
+<!-- Scrollable images -->
+<div class="scrollable-images-text">
+    <h2>During Your Stay</h2>
+    <p>Experience outdoor adventure such as kayaking, hiking, paddle boarding, and much more! </p>
+</div>
+
+<div class="scroll-container">
+    <img src="images/lake-1.png" alt="Lake">
+    <img src="images/hike.png" alt="Hike">
+    <img src="images/atv-1.png" alt="ATV">
+    <img src="images/horse.png" alt="Horseback Riding">
+    <img src="images/pool.png" alt="Outdoor Pool">
+</div>
+
+<!-- About hotel contact and policies -->
+<div class="main-content">
+    <div class="row">
+        <div class="column">
+            <div class="about-cont">
+                <h3>Contact information</h3>
+                <p>Phone number: 1+ 123-456-7890</p>
+                <p>Email: name.lastname@WoodsInn.com</p>
+                <p>Find us at 123 main street, Atlanta, Georgia 30013</p>
+            </div>
+        </div>
+        <div class="column">
+            <div class="about-cont">
+                <h3>Hotel Policy and information</h3>
+                <p>No cancellation allowed</p>
+                <p>24/hr guest services, gym and pool</p>
+                <p>Check in start at 4:00 pm and Check out is 11:00 am</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer Section -->
+<div class="footer">
+    &copy; 2024 Woods Inn, Inc
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

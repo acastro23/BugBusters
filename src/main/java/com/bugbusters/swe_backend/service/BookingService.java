@@ -36,7 +36,6 @@ public class BookingService {
     @Autowired
     private GuestService myGuestService;
 
-
     /*
         AC1127 -- This java file does a lot... For this createBooking method, it validates guest, room, payment, basically everything
         Note: This method also updates the room's availability, and also generates the confirmation number
@@ -56,7 +55,6 @@ public class BookingService {
         if (!isRoomAvailable(myRoom.getRoomID(), myBookingDTO.getCheckInTime(), myBookingDTO.getCheckOutTime())) {
             throw new RoomUnavailableException("That Room is unavailable for the chosen dates. Please try another Room.");
         }
-
         Payment myPayment = null;
         if (myBookingDTO.getMyPayment() != null) {
             PaymentDTO myPaymentDTO = myBookingDTO.getMyPayment();
@@ -122,7 +120,6 @@ public class BookingService {
         return myBookingRepository.save(myBooking);
     }
 
-
     /*
         AC1127 -- straight forward method. It cancels a booking using confirmation number and updates the room's availability.
     */
@@ -141,7 +138,6 @@ public class BookingService {
             room.setAvailability(true);
             myRoomRepository.save(room);
         }
-
         myBookingRepository.delete(booking);
         myConfirmationRepository.delete(confirmation);
     }
@@ -157,19 +153,6 @@ public class BookingService {
         return myBookingRepository.findBookings(roomID, checkIn, checkOut).isEmpty();
     }
 
-
-    private Guest createNewGuest(GuestDTO guestDTO) {
-        if (guestDTO == null) {
-            throw new IllegalArgumentException("Guest information is required to create a new guest.");
-        }
-
-        Guest guest = new Guest();
-        guest.setFName(guestDTO.getFname());
-        guest.setLName(guestDTO.getLname());
-        guest.setEmail(guestDTO.getEmail());
-        guest.setPhoneNumber(guestDTO.getPhoneNumber());
-        return myGuestRepository.save(guest);
-    }
 
     //AC1127 -- The next two methods just converts the entities into DTO objects
     private GuestDTO mapGuestToDTO(Guest myGuest) {
@@ -190,7 +173,6 @@ public class BookingService {
         return myPaymentDTO;
     }
 
-
     /*
         AC1127 -- This method handles booking details that will be sent to frontend when teh guest wants to see their booking details
         room, guest, and payment info is sent based on the confirmation number
@@ -201,12 +183,11 @@ public class BookingService {
         Confirmation myConfirmation = myConfirmationRepository.findUniqueByConfNum(confNum)
                 .orElseThrow(() -> new ResourceNotFoundException("Nothing found for the confirmation number: " + confNum));
 
-
         Booking myBooking = myBookingRepository.findById(myConfirmation.getBookingID())
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found for myConfirmation ID: " + myConfirmation.getBookingID()));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found for confirmation ID: " + myConfirmation.getBookingID()));
 
         Guest myGuest = myBooking.getMyGuest();
-        Payment payment = myPaymentRepository.findByGuest_GuestID(myGuest.getGuestID())
+        Payment payment = myPaymentRepository.findByGuestAndBooking(myGuest.getGuestID(), myBooking.getBookingID())
                 .orElse(null);
 
         BookingDTO myBookingDTO = new BookingDTO();

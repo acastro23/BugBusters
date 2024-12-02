@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+
+//AC1202 -- The roomImage stuff became irrelevant for the final presentation, but I will keep them for future enhancements to the project
+
 @Setter
 @Getter
 @Entity

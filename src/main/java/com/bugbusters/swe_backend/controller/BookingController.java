@@ -77,7 +77,7 @@ public class BookingController {
 
 
     //AC1127 -- Where the guest enters their confirmation number to view booking details, you can have an option to cancel booking on that same page and it calls
-    // this enpoint which cancels the booking
+    // this endpoint which cancels the booking
 
     @DeleteMapping("/cancel/{confirmationNumber}")
     public ResponseEntity<String> cancelBooking(@PathVariable String confirmationNumber) {
@@ -126,5 +126,4 @@ public class BookingController {
         BookingDTO bookingDetails = myBookingService.getBookingDetails(confNum);
         return new ResponseEntity<>(bookingDetails, HttpStatus.OK);
     }
-
 }

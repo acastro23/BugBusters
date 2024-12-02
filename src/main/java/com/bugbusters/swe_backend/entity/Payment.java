@@ -33,4 +33,8 @@ public class Payment {
     @ManyToOne
     @JoinColumn(name = "guestid", nullable = false)
     private Guest guest;
+
+    @ManyToOne
+    @JoinColumn(name = "bookingid")
+    private Booking booking;
 }

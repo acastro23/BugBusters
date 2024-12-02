@@ -9,6 +9,10 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            background-image: url('images/availability-bg.png'); /* Set background image */
+            background-repeat: no-repeat;
+            background-attachment: fixed;  
+            background-size: cover;
         }
 
         /* Main content area flexible to push footer down */
@@ -43,10 +47,15 @@
             color: black;
         }
 
+        /* Container for room info */
         .room-info {
             max-width: 600px;
             margin: 0 auto;
             text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+            border-radius: 8px;
+            margin-top: 20px;
         }
 
         img {
@@ -97,14 +106,17 @@
 <div class="navbar">
     <a href="home.html">Home</a>
     <a href="booking.html">Reserve Your Stay</a>
-    <a href="confirmation.html">Look up reservation</a>
+    <a href="summaryconfirmation.html">Look up reservation</a>
 </div>
 
 <div class="main-content">
-    <h2 class="centered-text">Available Rooms</h2>
+    <h2 class="centered-text"></h2>
+    
+    <!-- Room Info Section -->
     <div class="room-info" id="room-info">
-        <!-- Room image and price will go here -->
+        <!-- Room image, price, and check-in/out info will go here -->
     </div>
+
     <div class="room-number-container" id="room-number-container">
         <!-- Dynamic room numbers will go here -->
     </div>
@@ -142,6 +154,7 @@ if (availableRooms && availableRooms.length > 0) {
         <img src="images/${roomImage}" alt="${roomType}">
         <p class="room-price">Price: $${roomPrice} per night</p>
         <p class="room-dates">Check-in: ${formatDate(checkinDate)}<br>Check-out: ${formatDate(checkoutDate)}</p>
+        <p class="room-dates"><b>Available Rooms</b></p>
     `;
 
     // Dynamically generate room numbers
@@ -189,4 +202,3 @@ function bookRoom(roomID, roomType) {
 
 </body>
 </html>
-

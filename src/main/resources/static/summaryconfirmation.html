@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Enter Confirmation</title>
+  <style>
+    /* Make the body and html take up the full height */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      background-image: url('images/sc-background.png'); /* Set background image */
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+    }
+
+    /* Main content area */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #6F4E37;
+      width: 100%;
+      padding: 10px 0;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 14px 16px;
+      font-size: 20px;
+    }
+
+    .navbar a:hover {
+      background: #ddd;
+      color: black;
+    }
+
+    .confirmation-container {
+      text-align: center;
+      padding: 40px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #fff;
+      max-width: 400px;
+      width: 100%;
+      margin-top: 100px;
+    }
+
+    .form-field {
+      margin-bottom: 20px;
+    }
+
+    .form-field input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #6F4E37;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    .button-danger {
+      background-color: #d9534f;
+    }
+
+    .button-danger:hover {
+      background-color: #c9302c;
+    }
+
+    /* Booking Details Styling */
+    .booking-details {
+      display: none; /* Initially hidden */
+      margin-top: 20px;
+      text-align: left;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .booking-details h3 {
+      color: #6F4E37;
+      margin-bottom: 10px;
+    }
+
+    .booking-details p {
+      margin: 5px 0;
+    }
+
+    /* Error message styling */
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* Footer styling */
+    .footer {
+      background-color: #6F4E37;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 14px;
+      width: 100%;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+<!-- Navbar -->
+<div class="navbar">
+  <a href="home.html">Home</a>
+  <a href="booking.html">Reserve Your Stay</a>
+  <a href="founders.html">Founders</a>
+</div>
+
+<!-- Main content area -->
+<div class="content">
+  <div class="confirmation-container">
+    <h2>Enter Your Confirmation Number</h2>
+    <form id="confirmationForm">
+      <div class="form-field">
+        <input type="text" id="confirmationNumber" placeholder="Confirmation Number" required>
+      </div>
+      <button type="submit">Enter</button>
+      <p class="error-message" id="errorMessage">No reservation found with this confirmation number. Please try again.</p>
+    </form>
+  </div>
+
+  <div class="booking-details" id="bookingDetails">
+    <h3>Booking Details</h3>
+    <p><strong>Guest Name:</strong> <span id="guestName"></span></p>
+    <p><strong>Email:</strong> <span id="email"></span></p>
+    <p><strong>Phone:</strong> <span id="phone"></span></p>
+    <p><strong>Room Number:</strong> <span id="roomNumber"></span></p>
+    <p><strong>Room Type:</strong> <span id="roomType"></span></p>
+    <p><strong>Price:</strong> <span id="price"></span></p>
+    <p><strong>Check-in Date:</strong> <span id="checkinDate"></span></p>
+    <p><strong>Check-out Date:</strong> <span id="checkoutDate"></span></p>
+    <button class="button button-danger" id="cancelBookingButton">Cancel Booking</button>
+  </div>
+</div>
+
+<script>
+  document.getElementById("confirmationForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent form submission from reloading the page
+
+    const confirmationNumber = document.getElementById("confirmationNumber").value;
+    const errorMessage = document.getElementById("errorMessage");
+    const bookingDetails = document.getElementById("bookingDetails");
+
+    // Reset error message and booking details display
+    errorMessage.style.display = "none";
+    bookingDetails.style.display = "none";
+
+    if (!confirmationNumber) {
+      alert("Please enter a confirmation number.");
+      return;
+    }
+
+    // Fetch booking details using the confirmation number
+    fetch(`/api/bookings/details?confNum=${confirmationNumber}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error("No reservation found.");
+              }
+              return response.json();
+            })
+            .then(data => {
+              if (data) {
+                function formatDate(datetime) {
+                  return datetime.split("T")[0]; // Extract only the date
+                }
+
+                // Populate guest and booking details
+                document.getElementById("guestName").textContent = `${data.myGuest.fname} ${data.myGuest.lname}`;
+                document.getElementById("email").textContent = data.myGuest.email;
+                document.getElementById("phone").textContent = data.myGuest.phoneNumber;
+                document.getElementById("checkinDate").textContent = formatDate(data.checkInTime);
+                document.getElementById("checkoutDate").textContent = formatDate(data.checkOutTime);
+
+                // Fetch room details using roomID
+                return fetch(`/api/rooms/${data.roomID}`)
+                        .then(response => {
+                          if (!response.ok) {
+                            throw new Error("Room details could not be retrieved.");
+                          }
+                          return response.json();
+                        })
+                        .then(roomData => {
+                          document.getElementById("roomNumber").textContent = roomData.roomNumber;
+                          document.getElementById("roomType").textContent = roomData.type;
+                          document.getElementById("price").textContent = `$${roomData.price}`;
+
+                          // Show booking details
+                          bookingDetails.style.display = "block";
+
+                          // Attach cancel event to the button
+                          document.getElementById("cancelBookingButton").onclick = function () {
+                            if (confirm("Are you sure you want to cancel this booking?")) {
+                              fetch(`/api/bookings/cancel/${confirmationNumber}`, {
+                                method: "DELETE",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                },
+                              })
+                                      .then(response => {
+                                        if (!response.ok) {
+                                          throw new Error("Failed to cancel the booking.");
+                                        }
+                                        alert("Booking successfully canceled.");
+                                        location.reload();
+                                      })
+                                      .catch(error => {
+                                        console.error("Error canceling the booking:", error);
+                                        alert("An error occurred while canceling the booking. Please try again.");
+                                      });
+                            }
+                          };
+                        });
+              } else {
+                throw new Error("Booking details are incomplete.");
+              }
+            })
+            .catch(error => {
+              console.error("Error fetching reservation details:", error);
+              errorMessage.style.display = "block";
+            });
+  });
+</script>
+
+<!-- Footer Section -->
+<div class="footer">
+  &copy; 2024 Woods Inn, Inc
+</div>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-color: #6F4E37;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .navbar a {
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .navbar a:hover {
+            background: #ddd;
+            color: black;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 80px;
+        }
+        .column {
+            width: 34%;
+            text-align: center;
+        }
+        .about-section {
+            padding: 18px;
+            text-align: center;
+            background-color: #f9f9f9;
+            color: #6F4E37;
+        }
+        .about-section h2 {
+            font-size: 28px;
+            color: #6F4E37;
+        }
+        .about-section p {
+            font-size: 18px;
+            color: #333;
+            margin-top: 10px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+        }
+        .scrollable-images-text {
+            text-align: center;
+            background-color: #6F4E37;
+            color: white;
+            padding: 20px;
+            font-size: 18px;
+        }
+        .scroll-container {
+            background-color: #6F4E37;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px;
+        }
+        .scroll-container img {
+            padding: 5px;
+            width: 500px;
+            height: auto;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .info-section {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 30px 0;
+        }
+        .info-section .info-box {
+            text-align: center;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .info-section .info-box h3 {
+            color: #6F4E37;
+        }
+        .footer {
+            background-color: #6F4E37;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+<div class="navbar">
+    <a href="booking.html">Reserve Your Stay</a>
+    <a href="summaryconfirmation.html">Look up Reservation</a>
+    <a href="founders.html">Founders</a>
+</div>
+
+<div class="row">
+    <div class="column">
+        <img src="images/woods-in1.png" alt="Snow" style="width:100%">
+    </div>
+    <div class="column">
+        <img src="images/woods-in2.png" alt="Forest" style="width:100%">
+    </div>
+    <div class="column">
+        <img src="images/woods-in3.png" alt="Mountains" style="width:100%">
+    </div>
+</div>
+
+<!-- About Woods Inn Section -->
+<div class="about-section">
+    <h2>Woods Inn</h2>
+    <p>Tucked away in the serene embrace of a lush forest, Woods Inn offers an idyllic escape from the hustle and bustle of city life. This cozy cabin-style hotel invites you to reconnect with nature in a tranquil setting where the only sounds you will hear are the rustling of leaves and the songs of birds. Designed for peace-seekers and adventurers alike, the retreat is the perfect place to recharge and embrace the simplicity of the outdoors.
+        Guests can choose between two room options: a Single Bed Suite for solo travelers, and a Double Bed Suite, ideal for families or friends looking to share their getaway. Both styles combine rustic charm with modern comfort, offering premium bedding, large windows to soak in the forest views, and amenities designed to make your stay unforgettable.
+        Whether you spend your time unwinding on a private porch, exploring nearby hiking trails, or simply enjoying the stillness of the woods, Woods Inn promises an experience of rejuvenation and harmony with nature.</p>
+</div>
+
+<!-- Scrollable images -->
+<div class="scrollable-images-text">
+    <h2>During Your Stay</h2>
+    <p>Experience outdoor adventure such as kayaking, hiking, paddle boarding, and much more!</p>
+</div>
+
+<div class="scroll-container">
+    <img src="images/lake-1.png" alt="Lake">
+    <img src="images/hike.png" alt="Hike">
+    <img src="images/atv-1.png" alt="ATV">
+    <img src="images/horse.png" alt="Horseback Riding">
+    <img src="images/pool.png" alt="Outdoor Pool">
+</div>
+
+<!-- Contact and Policies Section -->
+<div class="main-content">
+    <div class="info-section">
+        <div class="info-box">
+            <h3>Contact Information</h3>
+            <p>Phone Number: 1+ 762-456-7890</p>
+            <p>Email: Get.Lost@WoodsInn.com</p>
+            <p>Find us at: 123 Wilderness Street, Blue Ridge, Georgia 30513</p>
+        </div>
+        <div class="info-box">
+            <h3>Hotel Policy and Information</h3>
+            <p>24/hr Guest Services</p>
+            <p>Gym, Recreational Center, and Pool available during business hours</p>
+            <p>Check-in starts at 4:00 pm and Check-out is 11:00 am</p>
+        </div>
+    </div>
+</div>
+
+<!-- Footer Section -->
+<div class="footer">
+    &copy; 2024 Woods Inn, Inc
+</div>
+
+</body>
+</html>

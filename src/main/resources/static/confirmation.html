@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Booking Confirmation</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      background-image: url('images/conf-background.png'); /* Set background image */
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #6F4E37;
+      width: 100%;
+      padding: 10px 0;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 14px 16px;
+      font-size: 20px;
+    }
+
+    .navbar a:hover {
+      background: #ddd;
+      color: black;
+    }
+
+    .confirmation-container {
+      max-width: 600px;
+      margin: 100px auto 20px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h2 {
+      color: #6F4E37;
+      margin-bottom: 20px;
+    }
+
+    p {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .confirmation-number {
+      font-size: 18px;
+      font-weight: bold;
+      color: #6F4E37;
+    }
+
+    .details {
+      text-align: left;
+      margin-top: 20px;
+      font-size: 14px;
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+
+    .details p {
+      margin: 5px 0;
+    }
+
+    .footer {
+      background-color: #6F4E37;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 14px;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+<div class="navbar">
+  <a href="home.html">Home</a>
+  <a href="booking.html">Reserve Another Stay</a>
+  <a href="summaryconfirmation.html">Look up Reservation</a>
+</div>
+
+<div class="confirmation-container">
+  <h2>Booking Confirmation</h2>
+  <p>Your confirmation number is:</p>
+  <p class="confirmation-number" id="confirmationNumber"></p>
+
+  <div class="details">
+    <p>Thank you <span id="guestName"></span> for Booking with Woods Inn</p>
+    <p>Your booking is confirmed.</p>
+  </div>
+</div>
+
+<div class="footer">
+  &copy; 2024 Woods Inn, Inc
+</div>
+
+<script>
+  // Utility function to capitalize the first letter of each name
+  function capitalizeName(name) {
+    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+  }
+
+  // Retrieve confirmation details from sessionStorage
+  const confirmationDetails = JSON.parse(sessionStorage.getItem("confirmationDetails"));
+
+  if (confirmationDetails) {
+    // Check if guest name exists in confirmationDetails
+    if (confirmationDetails.guestName) {
+      document.getElementById("guestName").textContent = confirmationDetails.guestName;
+    } else if (confirmationDetails.myGuest) {
+      // Use myGuest structure if present
+      const { fname, lname } = confirmationDetails.myGuest;
+      const formattedName = `${capitalizeName(fname)} ${capitalizeName(lname)}`;
+      document.getElementById("guestName").textContent = formattedName;
+    }
+    document.getElementById("confirmationNumber").textContent = confirmationDetails.confirmationNumber;
+  } else {
+    // Fallback to backend query if sessionStorage is empty
+    const urlParams = new URLSearchParams(window.location.search);
+    const confirmationNumber = urlParams.get("confirmation");
+
+    if (!confirmationNumber) {
+      alert("No confirmation number found. Please try again.");
+      window.location.href = "booking.html";
+    } else {
+      document.getElementById("confirmationNumber").textContent = confirmationNumber;
+
+      // Fetch booking details using the confirmation number
+      fetch(`/api/bookings/details?confNum=${confirmationNumber}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data && data.myGuest) {
+                  const { fname, lname } = data.myGuest;
+                  const formattedName = `${capitalizeName(fname)} ${capitalizeName(lname)}`;
+                  document.getElementById("guestName").textContent = formattedName;
+                } else {
+                  document.getElementById("guestName").textContent = "Guest name not found";
+                  console.error("Guest name missing in API response.");
+                }
+              })
+              .catch((error) => {
+                console.error("Error fetching reservation details:", error);
+                alert("An error occurred while fetching your booking details. Please try again.");
+              });
+    }
+  }
+</script>
+
+
+</body>
+</html>
+

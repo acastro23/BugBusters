@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+      background-image: url('images/payment-background.png'); /* Set background image */
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background-color: #6F4E37;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 20px;
+    }
+
+    .navbar a:hover {
+      background: #ddd;
+      color: black;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      margin-top: 80px;
+      gap: 20px;
+      padding: 0 10px;
+    }
+
+    .form-container {
+      width: 90%;
+      max-width: 800px;
+      margin: 30px auto;
+      background-color: #FFFFFF;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-column {
+      flex: 1;
+      padding: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #6F4E37;
+      font-weight: bold;
+    }
+
+    input[type="text"], input[type="email"], input[type="tel"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    input:focus {
+      border-color: #6F4E37;
+      outline: none;
+    }
+
+    button {
+      background-color: #6F4E37;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #5a3f30;
+    }
+
+    .footer {
+      background-color: #6F4E37;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 14px;
+      margin-top: auto;
+    }
+
+    @media screen and (max-width: 768px) {
+      .form-column {
+        width: 100%;
+        padding: 0;
+      }
+
+      .form-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="navbar">
+  <a href="home.html">Home</a>
+  <a href="founders.html">Founders</a>
+</div>
+
+<div class="form-container">
+  <div id="booking-overview">
+    <h2>Booking Overview</h2>
+    <p><strong>Room Type:</strong> <span id="room-type"></span></p>
+    <p><strong>Price:</strong> $<span id="price"></span></p>
+    <p><strong>Check-in:</strong> <span id="checkin-date"></span></p>
+    <p><strong>Check-out:</strong> <span id="checkout-date"></span></p>
+  </div>
+
+  <div class="form-row">
+    <div class="form-column">
+      <h2>Guest Information</h2>
+      <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" placeholder="First Name" aria-label="First Name" required>
+      </div>
+      <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input type="text" id="last-name" placeholder="Last Name" aria-label="Last Name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="example@example.com" aria-label="Email Address" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" placeholder="123-456-7890" maxlength="12" pattern="\d{3}-\d{3}-\d{4}"
+               aria-label="Phone Number (Format: 123-456-7890)" required>
+      </div>
+    </div>
+
+    <div class="form-column">
+      <h2>Payment Information</h2>
+      <div class="form-group">
+        <label for="cardholder-name">Card Holder Name</label>
+        <input type="text" id="cardholder-name" placeholder="John Doe" aria-label="Card Holder Name" required>
+      </div>
+      <div class="form-group">
+        <label for="card-number">Card Number</label>
+        <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="16"
+               aria-label="Credit Card Number" pattern="\d{16}" required>
+      </div>
+      <div class="form-group">
+        <label for="cvv">CVV</label>
+        <input type="password" id="cvv" placeholder="123" maxlength="3" aria-label="CVV Code" required>
+      </div>
+      <div class="form-group">
+        <label for="expiry-date">Expiration Date</label>
+        <input type="text" id="expiry-date" placeholder="MM/YY" maxlength="5" pattern="\d{2}/\d{2}"
+               aria-label="Card Expiration Date (MM/YY)" required>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-footer">
+    <button id="confirm-button">Confirm Booking</button>
+  </div>
+</div>
+
+<div class="footer">
+  &copy; 2024 Woods Inn, Inc
+</div>
+
+<script>
+  // Retrieve selected room details from sessionStorage
+  const bookingDetails = JSON.parse(sessionStorage.getItem("selectedRoom"));
+
+  // Log the selected room for debugging
+  console.log("Selected Room:", bookingDetails);
+
+  // Format dates to ensure they are in YYYY-MM-DD format
+  function formatDate(dateTime) {
+    return dateTime; // Assumes dateTime is already in the correct format
+  }
+
+  // Validate and update the UI with booking details
+  if (bookingDetails && bookingDetails.roomID) {
+    document.getElementById("room-type").textContent = bookingDetails.roomType === "Single" ? "Single Bed Room" : "Double Bed Room";
+    document.getElementById("price").textContent = bookingDetails.roomType === "Single" ? "150" : "250";
+    document.getElementById("checkin-date").textContent = formatDate(bookingDetails.checkin);
+    document.getElementById("checkout-date").textContent = formatDate(bookingDetails.checkout);
+  } else {
+    alert("Booking information is missing. Please restart the process.");
+    window.location.href = "/booking.html";
+  }
+
+  // Handle confirm booking
+  document.getElementById("confirm-button").addEventListener("click", function () {
+    const phoneNumber = document.getElementById("phone").value;
+    const expirationDate = document.getElementById("expiry-date").value;
+
+    // Validate phone number format
+    const phonePattern = /^\d{3}-\d{3}-\d{4}$/;
+    if (!phonePattern.test(phoneNumber)) {
+      alert("Please enter a valid phone number in the format 123-456-7890.");
+      return;
+    }
+
+    // Validate expiration date format
+    const expDatePattern = /^\d{2}\/\d{2}$/;
+    if (!expDatePattern.test(expirationDate)) {
+      alert("Please enter a valid expiration date in the format MM/YY.");
+      return;
+    }
+
+    const guestInfo = {
+      fname: document.getElementById("first-name").value,
+      lname: document.getElementById("last-name").value,
+      email: document.getElementById("email").value,
+      phoneNumber: phoneNumber, // Use the formatted phone number
+    };
+
+    const paymentInfo = {
+      firstName: document.getElementById("cardholder-name").value.split(" ")[0],
+      lastName: document.getElementById("cardholder-name").value.split(" ")[1] || "",
+      cardNumber: document.getElementById("card-number").value,
+      cvv: document.getElementById("cvv").value,
+      expDate: document.getElementById("expiry-date").value,
+    };
+
+    if (!guestInfo.fname || !guestInfo.lname || !guestInfo.email || !guestInfo.phoneNumber ||
+            !paymentInfo.firstName || !paymentInfo.lastName || !paymentInfo.cardNumber || !paymentInfo.cvv || !paymentInfo.expDate) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    if (!bookingDetails || !bookingDetails.roomID) {
+      alert("Room selection is missing. Please restart the booking process.");
+      window.location.href = "/booking.html";
+      return;
+    }
+
+    const payload = {
+      roomID: bookingDetails.roomID,
+      checkInTime: `${bookingDetails.checkin}T16:00:00`,
+      checkOutTime: `${bookingDetails.checkout}T11:00:00`,
+      myGuest: guestInfo,
+      myPayment: paymentInfo,
+    };
+
+    // Log payload for debugging
+    console.log("Payload being sent:", JSON.stringify(payload));
+
+    fetch("/api/bookings/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+            .then((response) => {
+              if (!response.ok) {
+                return response.json().then((error) => {
+                  console.error("Backend Error:", error);
+                  throw new Error(error.message || "Failed to create booking.");
+                });
+              }
+              return response.json();
+            })
+            .then((data) => {
+              sessionStorage.setItem("confirmationDetails", JSON.stringify(data));
+              window.location.href = "confirmation.html";
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert(error.message || "An error occurred while processing your booking. Please try again.");
+            });
+  });
+</script>
+
+</body>
+</html>

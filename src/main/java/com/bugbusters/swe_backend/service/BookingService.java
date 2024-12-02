@@ -179,8 +179,7 @@ public class BookingService {
             //Changes from Nathan
         } else if (!guestDTO.getEmail().matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
             throw new IllegalArgumentException("Invalid email format.");
-            //Not sure how numbers are being stored. Either as straight messages or with () between so this is subject to change
-        } else if (!guestDTO.getPhoneNumber().matches("^\\+?[0-9\\- ]+$")) {
+        } else if (!guestDTO.getPhoneNumber().matches("^\\d{3}-\\d{3}-\\d{4}$")) {
             throw new IllegalArgumentException("Invalid phone number.");
         } else if (!guestDTO.getFname().matches("^[A-Za-z]+(?:[-' ][A-Za-z]+)*$") || !guestDTO.getLname().matches("^[A-Za-z]+(?:[-' ][A-Za-z]+)*$")){
             throw new IllegalArgumentException(("The name may only contains letters."));

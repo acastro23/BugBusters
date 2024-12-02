@@ -80,6 +80,14 @@
       width: 100%;
     }
 
+    .button-danger {
+      background-color: #d9534f;
+    }
+
+    .button-danger:hover {
+      background-color: #c9302c;
+    }
+
     /* Booking Details Styling */
     .booking-details {
       display: none; /* Initially hidden */
@@ -153,6 +161,7 @@
     <p><strong>Price:</strong> <span id="price"></span></p>
     <p><strong>Check-in Date:</strong> <span id="checkinDate"></span></p>
     <p><strong>Check-out Date:</strong> <span id="checkoutDate"></span></p>
+    <button class="button button-danger" id="cancelBookingButton">Cancel Booking</button>
   </div>
 </div>
 
@@ -200,41 +209,59 @@ document.getElementById("confirmationForm").addEventListener("submit", function 
             document.getElementById("checkoutDate").textContent = formatDate(data.checkOutTime);
 
             // Fetch room details using roomID
-            return fetch(`/api/rooms/${data.roomID}`);
+            return fetch(`/api/rooms/${data.roomID}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Room details could not be retrieved.");
+                    }
+                    return response.json();
+                })
+                .then(roomData => {
+                    document.getElementById("roomNumber").textContent = roomData.roomNumber;
+                    document.getElementById("roomType").textContent = roomData.type;
+                    document.getElementById("price").textContent = `$${roomData.price}`;
+
+                    // Show booking details
+                    bookingDetails.style.display = "block";
+
+                    // Attach cancel event to the button
+                    document.getElementById("cancelBookingButton").onclick = function () {
+                        if (confirm("Are you sure you want to cancel this booking?")) {
+                            fetch(`/api/bookings/cancel/${confirmationNumber}`, {
+                                method: "DELETE",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error("Failed to cancel the booking.");
+                                }
+                                alert("Booking successfully canceled.");
+                                location.reload();
+                            })
+                            .catch(error => {
+                                console.error("Error canceling the booking:", error);
+                                alert("An error occurred while canceling the booking. Please try again.");
+                            });
+                        }
+                    };
+                });
         } else {
             throw new Error("Booking details are incomplete.");
         }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Room details could not be retrieved.");
-        }
-        return response.json();
-    })
-    .then(roomData => {
-        // Populate room details
-        document.getElementById("roomNumber").textContent = roomData.roomNumber;
-        document.getElementById("roomType").textContent = roomData.type;
-        document.getElementById("price").textContent = `$${roomData.price}`;
-
-        // Show booking details
-        bookingDetails.style.display = "block";
     })
     .catch(error => {
         console.error("Error fetching reservation details:", error);
         errorMessage.style.display = "block";
     });
 });
-
 </script>
 
 <!-- Footer Section -->
 <div class="footer">
   &copy; 2024 Woods Inn, Inc
 </div>
-
-</body>
-</html>
 
 </body>
 </html>

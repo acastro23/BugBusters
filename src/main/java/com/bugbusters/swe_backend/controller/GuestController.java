@@ -62,3 +62,8 @@ public class GuestController {
         return ResponseEntity.noContent().build();
     }
 }
+
+
+/*
+    Final update: This controller was purely for messing around with springboot annotations, most of the backend work happens within the booking files.
+*/

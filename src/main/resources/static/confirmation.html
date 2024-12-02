@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Enter Confirmation</title>
+  <title>Booking Confirmation</title>
   <style>
-    /* Make the body and html take up the full height */
     html, body {
       margin: 0;
       padding: 0;
@@ -12,15 +11,10 @@
       background-color: #f4f4f4;
       display: flex;
       flex-direction: column;
-    }
-
-    /* Main content area */
-    .content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      background-image: url('images/conf-background.png'); /* Set background image */
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
     }
 
     .navbar {
@@ -48,163 +42,135 @@
     }
 
     .confirmation-container {
-      text-align: center;
-      padding: 40px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      max-width: 600px;
+      margin: 100px auto 20px;
+      padding: 20px;
       background-color: #fff;
-      max-width: 400px;
-      width: 100%;
-      margin-top: 100px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
     }
 
-    .form-field {
+    h2 {
+      color: #6F4E37;
       margin-bottom: 20px;
     }
 
-    .form-field input {
-      width: 100%;
-      padding: 10px;
+    p {
+      margin: 10px 0;
       font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
     }
 
-    button {
-      background-color: #6F4E37;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      width: 100%;
-    }
-
-    /* Booking Details Styling */
-    .booking-details {
-      display: none; /* Initially hidden */
-      margin-top: 20px;
-      text-align: left;
-      padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background-color: #f9f9f9;
-      max-width: 600px;
-      width: 100%;
-    }
-
-    .booking-details h3 {
+    .confirmation-number {
+      font-size: 18px;
+      font-weight: bold;
       color: #6F4E37;
-      margin-bottom: 10px;
     }
 
-    .booking-details p {
+    .details {
+      text-align: left;
+      margin-top: 20px;
+      font-size: 14px;
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+
+    .details p {
       margin: 5px 0;
     }
 
-    /* Error message styling */
-    .error-message {
-      color: red;
-      font-size: 14px;
-      margin-top: 10px;
-      display: none;
-    }
-
-    /* Footer styling */
     .footer {
       background-color: #6F4E37;
       color: white;
       text-align: center;
       padding: 10px 0;
       font-size: 14px;
+      margin-top: auto;
     }
   </style>
 </head>
 <body>
-<!-- Navbar -->
 <div class="navbar">
   <a href="home.html">Home</a>
-  <a href="booking.html">Reserve Your Stay</a>
+  <a href="booking.html">Reserve Another Stay</a>
+  <a href="summaryconfirmation.html">Look up Reservation</a>
 </div>
 
-<!-- Main content area -->
-<div class="content">
-  <div class="confirmation-container">
-    <h2>Enter Your Confirmation Number</h2>
-    <form id="confirmationForm">
-      <div class="form-field">
-        <input type="text" id="confirmationNumber" placeholder="Confirmation Number" required>
-      </div>
-      <button type="submit">Enter</button>
-      <p class="error-message" id="errorMessage">No reservation found with this confirmation number. Please try again.</p>
-    </form>
-  </div>
+<div class="confirmation-container">
+  <h2>Booking Confirmation</h2>
+  <p>Your confirmation number is:</p>
+  <p class="confirmation-number" id="confirmationNumber"></p>
 
-  <div class="booking-details" id="bookingDetails">
-    <h3>Booking Details</h3>
-    <p><strong>Guest Name:</strong> <span id="guestName"></span></p>
-    <p><strong>Email:</strong> <span id="email"></span></p>
-    <p><strong>Phone:</strong> <span id="phone"></span></p>
-    <p><strong>Room Type:</strong> <span id="roomType"></span></p>
-    <p><strong>Check-in Date:</strong> <span id="checkinDate"></span></p>
-    <p><strong>Check-out Date:</strong> <span id="checkoutDate"></span></p>
+  <div class="details">
+    <p>Thank you <span id="guestName"></span> for Booking with Woods Inn</p>
+    <p>Your booking is confirmed.</p>
   </div>
 </div>
 
-<script>
-  document.getElementById("confirmationForm").addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevent form submission from reloading the page
-
-    const confirmationNumber = document.getElementById("confirmationNumber").value;
-    const errorMessage = document.getElementById("errorMessage");
-    const bookingDetails = document.getElementById("bookingDetails");
-
-    // Reset error message and booking details display
-    errorMessage.style.display = "none";
-    bookingDetails.style.display = "none";
-
-    if (!confirmationNumber) {
-      alert("Please enter a confirmation number.");
-      return;
-    }
-
-    // Fetch booking details using the confirmation number
-    fetch(`/api/bookings/details?confNum=${confirmationNumber}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error("No reservation found.");
-              }
-              return response.json();
-            })
-            .then(data => {
-              if (data) {
-                // Populate booking details
-                document.getElementById("guestName").textContent = `${data.myGuest.fname} ${data.myGuest.lname}`;
-                document.getElementById("email").textContent = data.myGuest.email;
-                document.getElementById("phone").textContent = data.myGuest.phoneNumber;
-                document.getElementById("roomType").textContent = data.roomType;
-                document.getElementById("checkinDate").textContent = data.checkInTime;
-                document.getElementById("checkoutDate").textContent = data.checkOutTime;
-                // Show booking details
-                bookingDetails.style.display = "block";
-              }
-            })
-            .catch(error => {
-              console.error("Error fetching reservation details:", error);
-              errorMessage.style.display = "block";
-            });
-  });
-</script>
-<!-- Footer Section -->
 <div class="footer">
   &copy; 2024 Woods Inn, Inc
 </div>
+
+<script>
+  // Utility function to capitalize the first letter of each name
+  function capitalizeName(name) {
+    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+  }
+
+  // Retrieve confirmation details from sessionStorage
+  const confirmationDetails = JSON.parse(sessionStorage.getItem("confirmationDetails"));
+
+  if (confirmationDetails) {
+    // Check if guest name exists in confirmationDetails
+    if (confirmationDetails.guestName) {
+      document.getElementById("guestName").textContent = confirmationDetails.guestName;
+    } else if (confirmationDetails.myGuest) {
+      // Use myGuest structure if present
+      const { fname, lname } = confirmationDetails.myGuest;
+      const formattedName = `${capitalizeName(fname)} ${capitalizeName(lname)}`;
+      document.getElementById("guestName").textContent = formattedName;
+    }
+    document.getElementById("confirmationNumber").textContent = confirmationDetails.confirmationNumber;
+  } else {
+    // Fallback to backend query if sessionStorage is empty
+    const urlParams = new URLSearchParams(window.location.search);
+    const confirmationNumber = urlParams.get("confirmation");
+
+    if (!confirmationNumber) {
+      alert("No confirmation number found. Please try again.");
+      window.location.href = "booking.html";
+    } else {
+      document.getElementById("confirmationNumber").textContent = confirmationNumber;
+
+      // Fetch booking details using the confirmation number
+      fetch(`/api/bookings/details?confNum=${confirmationNumber}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data && data.myGuest) {
+                  const { fname, lname } = data.myGuest;
+                  const formattedName = `${capitalizeName(fname)} ${capitalizeName(lname)}`;
+                  document.getElementById("guestName").textContent = formattedName;
+                } else {
+                  document.getElementById("guestName").textContent = "Guest name not found";
+                  console.error("Guest name missing in API response.");
+                }
+              })
+              .catch((error) => {
+                console.error("Error fetching reservation details:", error);
+                alert("An error occurred while fetching your booking details. Please try again.");
+              });
+    }
+  }
+</script>
+
+
 </body>
 </html>
 

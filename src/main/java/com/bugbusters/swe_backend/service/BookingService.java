@@ -54,6 +54,11 @@ public class BookingService {
 
         if (!isRoomAvailable(myRoom.getRoomID(), myBookingDTO.getCheckInTime(), myBookingDTO.getCheckOutTime())) {
             throw new RoomUnavailableException("That Room is unavailable for the chosen dates. Please try another Room.");
+        //Changes from Nathan
+        } else if (myBookingDTO.getCheckInTime().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("Check-in time cannot be in the past.");
+        } else if (!myBookingDTO.getCheckOutTime().isAfter(myBookingDTO.getCheckInTime())) {
+            throw new IllegalArgumentException("Check-out time must be after check-in time.");
         }
         Payment myPayment = null;
         if (myBookingDTO.getMyPayment() != null) {

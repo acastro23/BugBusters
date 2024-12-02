@@ -11,6 +11,10 @@
             display: flex;
             flex-direction: column;
             min-height: 100%;
+            background-image: url('images/booking.background.png'); /* Set background image */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
         }
         .content {
             flex: 1;
@@ -36,10 +40,7 @@
             background: #ddd;
             color: black;
         }
-        h2 {
-            text-align: center;
-            margin: 20px 0;
-        }
+
         /* Booking Form Styling */
         .booking-container {
             max-width: 400px;
@@ -48,13 +49,17 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #f9f9f9;
+            text-align: center;
         }
         .form-field {
             margin-bottom: 20px;
+            text-align: center;
+            margin-right: 20px;
         }
         .form-field label {
             display: block;
             margin-bottom: 5px;
+            text-align: center;
         }
         .form-field input {
             width: 100%;
@@ -72,10 +77,12 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            text-align: center;
         }
         .button:hover {
             background-color: #5a3e2f;
         }
+
         /* Room Selection Styling */
         .room-container {
             display: flex;
@@ -104,7 +111,7 @@
         .amenities {
             padding: 10px;
             font-size: 14px;
-            text-align: left;
+            text-align: center; /* center text */
         }
         .amenities h3 {
             color: #6F4E37;
@@ -124,7 +131,7 @@
 <!-- Navbar -->
 <div class="navbar">
     <a href="home.html">Home</a>
-    <a href="confirmation.html">Look up reservation</a>
+    <a href="summaryconfirmation.html">Look up reservation</a>
     <a href="founders.html">Founders</a>
 </div>
 
@@ -145,7 +152,7 @@
     </div>
 
     <!-- Room Descriptions -->
-    <h2>Our Rooms</h2>
+    <h2></h2>
     <div class="room-container">
         <div class="room-card">
             <img src="images/one-bed.png" alt="One-bed Room">
@@ -205,7 +212,7 @@
     // Initialize flatpickr
     const checkin = flatpickr("#checkinDate", {
         dateFormat: "Y-m-d",
-        minDate: "tomorrow",
+        minDate: new Date().fp_incr(1), // User can't checkin same day
         onChange: function(selectedDates, dateStr, instance) {
             checkout.set("minDate", dateStr);
         }

@@ -42,6 +42,15 @@ public class GuestService {
         if (existingGuest.isPresent()) {
             return existingGuest.get();
         }
+        if (guestDTO == null) {
+            throw new IllegalArgumentException("Guest information is required to create a new guest.");
+        } else if (!guestDTO.getEmail().matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
+            throw new IllegalArgumentException("Invalid email format.");
+        } else if (!guestDTO.getPhoneNumber().matches("^\\d{3}-\\d{3}-\\d{4}$")) {
+            throw new IllegalArgumentException("Invalid phone number.");
+        } else if (!guestDTO.getFname().matches("^[A-Za-z]+(?:[-' ][A-Za-z]+)*$") || !guestDTO.getLname().matches("^[A-Za-z]+(?:[-' ][A-Za-z]+)*$")) {
+            throw new IllegalArgumentException(("The name may only contains letters."));
+        }
         Guest myGuest = new Guest();
         myGuest.setFName(guestDTO.getFname());
         myGuest.setLName(guestDTO.getLname());

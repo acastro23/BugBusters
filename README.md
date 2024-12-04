@@ -90,6 +90,6 @@ the information and store in the database.
 
 # Running the application
 In order to run the application, pull from the main branch and run the 
-<b><SWEBackendApplication/b> class to run the app. Once the app is running, use this link http://localhost:8080/home.html
+<b>SWEBackendApplication</b> class to run the app. Once the app is running, use this link http://localhost:8080/home.html
 to head to our home page. From there users will be able to make bookings, check their booking details, cancel bookings,
 and look at the founders of the site.
